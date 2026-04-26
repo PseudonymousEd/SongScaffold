@@ -1,0 +1,15 @@
+package com.songscaffold.app.model
+
+enum class SongStep {
+    TOPIC,
+    POINT_OF_VIEW,
+    DELIVERY_MODE,
+    PHRASING_STYLE,
+    EMOTIONAL_INTENSITY,
+    CHORD_PROGRESSION,
+    SONG_KEY,
+    STARTING_NOTE,
+    SECOND_NOTE_DIRECTION,
+    RHYME_SCHEME,
+    SUMMARY
+}

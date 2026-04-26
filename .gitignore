@@ -1,0 +1,23 @@
+# Built outputs
+build/
+app/build/
+
+# Gradle
+.gradle/
+gradle/wrapper/gradle-wrapper.jar
+
+# Local configuration (machine-specific, may contain SDK path)
+local.properties
+
+# IntelliJ / Android Studio — keep only shared project settings
+.idea/
+!.idea/modules.xml
+!.idea/runConfigurations/
+!.idea/.gitignore
+
+# Kotlin build metadata
+.kotlin/
+
+# OS
+.DS_Store
+Thumbs.db

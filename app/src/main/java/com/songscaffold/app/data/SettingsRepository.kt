@@ -1,0 +1,59 @@
+package com.songscaffold.app.data
+
+import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.preferencesDataStore
+import com.songscaffold.app.model.StepSettings
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+
+private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "step_settings")
+
+class SettingsRepository(private val context: Context) {
+
+    private object Keys {
+        val TOPIC = booleanPreferencesKey("topic")
+        val POINT_OF_VIEW = booleanPreferencesKey("point_of_view")
+        val DELIVERY_MODE = booleanPreferencesKey("delivery_mode")
+        val PHRASING_STYLE = booleanPreferencesKey("phrasing_style")
+        val EMOTIONAL_INTENSITY = booleanPreferencesKey("emotional_intensity")
+        val CHORD_PROGRESSION = booleanPreferencesKey("chord_progression")
+        val SONG_KEY = booleanPreferencesKey("song_key")
+        val STARTING_NOTE = booleanPreferencesKey("starting_note")
+        val SECOND_NOTE_DIRECTION = booleanPreferencesKey("second_note_direction")
+        val RHYME_SCHEME = booleanPreferencesKey("rhyme_scheme")
+    }
+
+    val stepSettings: Flow<StepSettings> = context.dataStore.data.map { prefs ->
+        StepSettings(
+            topicEnabled = prefs[Keys.TOPIC] ?: true,
+            pointOfViewEnabled = prefs[Keys.POINT_OF_VIEW] ?: true,
+            deliveryModeEnabled = prefs[Keys.DELIVERY_MODE] ?: true,
+            phrasingStyleEnabled = prefs[Keys.PHRASING_STYLE] ?: true,
+            emotionalIntensityEnabled = prefs[Keys.EMOTIONAL_INTENSITY] ?: true,
+            chordProgressionEnabled = prefs[Keys.CHORD_PROGRESSION] ?: true,
+            songKeyEnabled = prefs[Keys.SONG_KEY] ?: true,
+            startingNoteEnabled = prefs[Keys.STARTING_NOTE] ?: true,
+            secondNoteDirectionEnabled = prefs[Keys.SECOND_NOTE_DIRECTION] ?: true,
+            rhymeSchemeEnabled = prefs[Keys.RHYME_SCHEME] ?: true
+        )
+    }
+
+    suspend fun updateSettings(settings: StepSettings) {
+        context.dataStore.edit { prefs ->
+            prefs[Keys.TOPIC] = settings.topicEnabled
+            prefs[Keys.POINT_OF_VIEW] = settings.pointOfViewEnabled
+            prefs[Keys.DELIVERY_MODE] = settings.deliveryModeEnabled
+            prefs[Keys.PHRASING_STYLE] = settings.phrasingStyleEnabled
+            prefs[Keys.EMOTIONAL_INTENSITY] = settings.emotionalIntensityEnabled
+            prefs[Keys.CHORD_PROGRESSION] = settings.chordProgressionEnabled
+            prefs[Keys.SONG_KEY] = settings.songKeyEnabled
+            prefs[Keys.STARTING_NOTE] = settings.startingNoteEnabled
+            prefs[Keys.SECOND_NOTE_DIRECTION] = settings.secondNoteDirectionEnabled
+            prefs[Keys.RHYME_SCHEME] = settings.rhymeSchemeEnabled
+        }
+    }
+}
