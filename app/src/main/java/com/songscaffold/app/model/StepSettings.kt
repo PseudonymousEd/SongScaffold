@@ -8,6 +8,7 @@ data class StepSettings(
     val phrasingStyleEnabled: Boolean = true,
     val emotionalIntensityEnabled: Boolean = true,
     val chordProgressionEnabled: Boolean = true,
+    val secondChordProgressionEnabled: Boolean = false,
     val songKeyEnabled: Boolean = true,
     val startingNoteEnabled: Boolean = true,
     val secondNoteDirectionEnabled: Boolean = true,

@@ -8,8 +8,10 @@ data class SongIdea(
     val phrasingStyle: String? = null,
     val emotionalIntensity: String? = null,
     val chordProgression: ChordProgression? = null,
+    val secondChordProgression: ChordProgression? = null,
     val songKey: String? = null,
     val renderedChords: List<String> = emptyList(),
+    val secondRenderedChords: List<String> = emptyList(),
     val startingNote: String? = null,
     val secondNoteDirection: String? = null,
     val rhymeScheme: String? = null

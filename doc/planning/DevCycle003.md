@@ -1,6 +1,6 @@
 # DevCycle 003: Random Idea + Second Chord Progression
 
-**Status:** Planning
+**Status:** Work Complete
 **Start Date:** 2026-05-02
 **Target Completion:** TBD
 **Focus:** Add a "Random Idea" shortcut on the Home screen and a new Second Chord Progression step.
@@ -26,12 +26,12 @@ Two independent but complementary additions. First, a "Random Idea" button on th
 
 ### Phase 1: Data and Models
 
-**Status:** Planning
+**Status:** Work Complete
 
-- [ ] Add `SECOND_CHORD_PROGRESSION` to `SongStep` enum, inserted between `CHORD_PROGRESSION` and `SONG_KEY`
-- [ ] Add `secondChordProgression: ChordProgression? = null` and `secondRenderedChords: List<String> = emptyList()` to `SongIdea`
-- [ ] Add `secondChordProgressionEnabled: Boolean = false` to `StepSettings` (default off — see Open Questions)
-- [ ] Add `SECOND_CHORD_PROGRESSION = booleanPreferencesKey("second_chord_progression")` to `SettingsRepository.Keys` and wire it into `stepSettings` flow and `updateSettings`
+- [x] Add `SECOND_CHORD_PROGRESSION` to `SongStep` enum, inserted between `CHORD_PROGRESSION` and `SONG_KEY`
+- [x] Add `secondChordProgression: ChordProgression? = null` and `secondRenderedChords: List<String> = emptyList()` to `SongIdea`
+- [x] Add `secondChordProgressionEnabled: Boolean = false` to `StepSettings` (default off — see Open Questions)
+- [x] Add `SECOND_CHORD_PROGRESSION = booleanPreferencesKey("second_chord_progression")` to `SettingsRepository.Keys` and wire it into `stepSettings` flow and `updateSettings`
 
 **Technical Notes:**
 `SECOND_CHORD_PROGRESSION` sits between `CHORD_PROGRESSION` and `SONG_KEY` in the enum. `SongIdea` is a data class — adding both new fields with defaults is non-breaking. The DataStore key is `"second_chord_progression"` to match the existing naming convention. `secondRenderedChords` mirrors `renderedChords`: it is populated whenever both `songKey` and `secondChordProgression` are set, using `ChordMapper.renderProgression`.
@@ -40,12 +40,12 @@ Two independent but complementary additions. First, a "Random Idea" button on th
 
 ### Phase 2: ViewModel
 
-**Status:** Planning
+**Status:** Work Complete
 
-- [ ] Update `buildEnabledSteps` to insert `SECOND_CHORD_PROGRESSION` when `s.chordProgressionEnabled && s.secondChordProgressionEnabled` (the first progression must also be enabled)
-- [ ] Add `setSecondChordProgression(value: ChordProgression)` to `SongIdeaViewModel` — mirrors `setChordProgression`, populating `secondRenderedChords` using the current `songKey`
-- [ ] Update `setSongKey` to also re-render `secondRenderedChords` when `secondChordProgression` is set
-- [ ] Add `randomizeAll(settings: StepSettings)` method to `SongIdeaViewModel` — builds enabled steps, picks random values for every step, and sets `_songIdea` in one shot (used by the Random Idea button)
+- [x] Update `buildEnabledSteps` to insert `SECOND_CHORD_PROGRESSION` when `s.chordProgressionEnabled && s.secondChordProgressionEnabled` (the first progression must also be enabled)
+- [x] Add `setSecondChordProgression(value: ChordProgression)` to `SongIdeaViewModel` — mirrors `setChordProgression`, populating `secondRenderedChords` using the current `songKey`
+- [x] Update `setSongKey` to also re-render `secondRenderedChords` when `secondChordProgression` is set
+- [x] Add `randomizeAll(settings: StepSettings)` method to `SongIdeaViewModel` — builds enabled steps, picks random values for every step, and sets `_songIdea` in one shot (used by the Random Idea button)
 
 **Technical Notes:**
 `setSecondChordProgression`:
@@ -100,30 +100,31 @@ fun randomizeAll(settings: StepSettings) {
 
 ### Phase 3: UI
 
-**Status:** Planning
+**Status:** Work Complete
 
 **HomeScreen**
-- [ ] Add `onRandomIdea: () -> Unit` parameter to `HomeScreen`
-- [ ] Add an `OutlinedButton` labeled "Random Idea" between the existing "Start Song Idea" and "Settings" buttons (with the same `Spacer(height = 16.dp)` spacing)
+- [x] Add `onRandomIdea: () -> Unit` parameter to `HomeScreen`
+- [x] Add an `OutlinedButton` labeled "Random Idea" between the existing "Start Song Idea" and "Settings" buttons (with the same `Spacer(height = 16.dp)` spacing)
 
 **StepScreen**
-- [ ] Add `selectedSecondProgression: ChordProgression?` and `onSecondProgressionSelected: (ChordProgression) -> Unit` parameters to `StepScreen`
-- [ ] Add a dispatch case for `SongStep.SECOND_CHORD_PROGRESSION` in `StepScreen`'s step type switch — renders the existing `ChordProgressionStepContent` composable using `selectedSecondProgression` and `onSecondProgressionSelected`. Step description: "Pick a second chord progression (e.g. for the chorus)."
+- [x] Add `selectedSecondProgression: ChordProgression?` and `onSecondProgressionSelected: (ChordProgression) -> Unit` parameters to `StepScreen`
+- [x] Add a dispatch case for `SongStep.SECOND_CHORD_PROGRESSION` in `StepScreen`'s step type switch — renders the existing `ChordProgressionStepContent` composable using `selectedSecondProgression` and `onSecondProgressionSelected`. Step description: "Pick a second chord progression (e.g. for the chorus)."
+- [x] Suppress Random button for `SECOND_CHORD_PROGRESSION` (same rule as `CHORD_PROGRESSION` — list-based step, no random button)
 
 **SummaryScreen**
-- [ ] Update the chord section in `SummaryScreen` to display `secondChordProgression` and `secondRenderedChords` when set
-- [ ] When both progressions are present, relabel them "Chord Prog. 1" / "Chord Prog. 2" and "Chords 1" / "Chords 2"; when only one is present, keep the existing "Chord Progression" / "Chords" labels
-- [ ] Add `onRandomIdea: () -> Unit` parameter to `SummaryScreen`
-- [ ] Add an `OutlinedButton` labeled "Random Idea" between the existing "Start Over" and "Home" buttons
+- [x] Update the chord section in `SummaryScreen` to display `secondChordProgression` and `secondRenderedChords` when set
+- [x] When both progressions are present, relabel them "Chord Prog. 1" / "Chord Prog. 2" and "Chords 1" / "Chords 2"; when only one is present, keep the existing "Chord Progression" / "Chords" labels
+- [x] Add `onRandomIdea: () -> Unit` parameter to `SummaryScreen`
+- [x] Add an `OutlinedButton` labeled "Random Idea" between the existing "Start Over" and "Home" buttons
 
 **SettingsScreen**
-- [ ] Add a toggle row for "Second Chord Progression" immediately after the Chord Progression toggle row
+- [x] Add a toggle row for "Second Chord Progression" immediately after the Chord Progression toggle row (greyed out with subtitle when Chord Progression is disabled)
 
 **MainActivity**
-- [ ] Wire `onRandomIdea` in the `HomeScreen` composable: call `songIdeaViewModel.randomizeAll(settings)`, then navigate to `"summary"` with `popUpTo("home") { inclusive = false }`
-- [ ] Wire `onRandomIdea` in the `SummaryScreen` composable: call `songIdeaViewModel.randomizeAll(settings)`, then navigate to `"summary"` replacing itself (`popUpTo("summary") { inclusive = true }`) so the back stack stays clean
-- [ ] Pass `selectedSecondProgression = songIdea.secondChordProgression` and `onSecondProgressionSelected = { songIdeaViewModel.setSecondChordProgression(it) }` to the `StepScreen` composable
-- [ ] Add `SongStep.SECOND_CHORD_PROGRESSION -> vm.setSecondChordProgression(PromptRepository.chordProgressions.random())` to `applyRandom`
+- [x] Wire `onRandomIdea` in the `HomeScreen` composable: call `songIdeaViewModel.randomizeAll(settings)`, then navigate to `"summary"` with `popUpTo("home") { inclusive = false }`
+- [x] Wire `onRandomIdea` in the `SummaryScreen` composable: call `songIdeaViewModel.randomizeAll(settings)`, then navigate to `"summary"` replacing itself (`popUpTo("summary") { inclusive = true }`) so the back stack stays clean
+- [x] Pass `selectedSecondProgression = songIdea.secondChordProgression` and `onSecondProgressionSelected = { songIdeaViewModel.setSecondChordProgression(it) }` to the `StepScreen` composable
+- [x] Add `SongStep.SECOND_CHORD_PROGRESSION -> vm.setSecondChordProgression(PromptRepository.chordProgressions.random())` to `applyRandom`
 
 **Technical Notes:**
 `HomeScreen`'s new button layout (top to bottom): "Start Song Idea" (filled), "Random Idea" (outlined), spacer, "Settings" (outlined). The Random Idea button should be the same width as the others (`fillMaxWidth`) but can be the same height as Settings (`height(48.dp)`) since it is a secondary action.

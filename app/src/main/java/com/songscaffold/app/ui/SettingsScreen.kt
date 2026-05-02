@@ -86,6 +86,14 @@ fun SettingsScreen(
                 onToggle { s -> s.copy(chordProgressionEnabled = it) }
             }
             SettingsToggleRow(
+                label = "Second Chord Progression",
+                subtitle = if (!settings.chordProgressionEnabled) "Requires Chord Progression" else null,
+                checked = settings.secondChordProgressionEnabled,
+                enabled = settings.chordProgressionEnabled
+            ) {
+                onToggle { s -> s.copy(secondChordProgressionEnabled = it) }
+            }
+            SettingsToggleRow(
                 label = "Song Key",
                 subtitle = if (!settings.chordProgressionEnabled) "Requires Chord Progression" else null,
                 checked = settings.songKeyEnabled,

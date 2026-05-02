@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun HomeScreen(
     onStartSongIdea: () -> Unit,
+    onRandomIdea: () -> Unit,
     onSettings: () -> Unit
 ) {
     val context = LocalContext.current
@@ -68,6 +69,15 @@ fun HomeScreen(
                     text = "Start Song Idea",
                     style = MaterialTheme.typography.titleLarge
                 )
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+            OutlinedButton(
+                onClick = onRandomIdea,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(48.dp)
+            ) {
+                Text(text = "Random Idea")
             }
             Spacer(modifier = Modifier.height(16.dp))
             OutlinedButton(

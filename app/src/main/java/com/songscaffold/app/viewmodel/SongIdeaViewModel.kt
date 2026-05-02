@@ -34,6 +34,7 @@ class SongIdeaViewModel : ViewModel() {
         if (s.phrasingStyleEnabled) add(SongStep.PHRASING_STYLE)
         if (s.emotionalIntensityEnabled) add(SongStep.EMOTIONAL_INTENSITY)
         if (s.chordProgressionEnabled) add(SongStep.CHORD_PROGRESSION)
+        if (s.chordProgressionEnabled && s.secondChordProgressionEnabled) add(SongStep.SECOND_CHORD_PROGRESSION)
         // Song Key only appears when Chord Progression is also enabled
         if (s.chordProgressionEnabled && s.songKeyEnabled) add(SongStep.SONG_KEY)
         if (s.startingNoteEnabled) add(SongStep.STARTING_NOTE)
@@ -60,10 +61,18 @@ class SongIdeaViewModel : ViewModel() {
         }
     }
 
+    fun setSecondChordProgression(value: ChordProgression) {
+        _songIdea.update { idea ->
+            val rendered = idea.songKey?.let { ChordMapper.renderProgression(it, value) } ?: emptyList()
+            idea.copy(secondChordProgression = value, secondRenderedChords = rendered)
+        }
+    }
+
     fun setSongKey(value: String) {
         _songIdea.update { idea ->
             val rendered = idea.chordProgression?.let { ChordMapper.renderProgression(value, it) } ?: emptyList()
-            idea.copy(songKey = value, renderedChords = rendered)
+            val secondRendered = idea.secondChordProgression?.let { ChordMapper.renderProgression(value, it) } ?: emptyList()
+            idea.copy(songKey = value, renderedChords = rendered, secondRenderedChords = secondRendered)
         }
     }
 
@@ -76,6 +85,30 @@ class SongIdeaViewModel : ViewModel() {
     fun randomTopic(): TopicPrompt = PromptRepository.topics.random()
 
     fun randomRhymeWord(): String = PromptRepository.rhymeWords.random()
+
+    fun randomizeAll(settings: StepSettings) {
+        val steps = buildEnabledSteps(settings)
+        _enabledSteps.value = steps
+        val key   = if (SongStep.SONG_KEY in steps) PromptRepository.majorKeys.random() else null
+        val prog  = if (SongStep.CHORD_PROGRESSION in steps) PromptRepository.chordProgressions.random() else null
+        val prog2 = if (SongStep.SECOND_CHORD_PROGRESSION in steps) PromptRepository.chordProgressions.random() else null
+        _songIdea.value = SongIdea(
+            topic               = if (SongStep.TOPIC in steps) PromptRepository.topics.random() else null,
+            rhymeWord           = if (SongStep.RHYME_WORD in steps) PromptRepository.rhymeWords.random() else null,
+            pointOfView         = if (SongStep.POINT_OF_VIEW in steps) PromptRepository.pointOfViewOptions.random() else null,
+            deliveryMode        = if (SongStep.DELIVERY_MODE in steps) PromptRepository.deliveryModes.random() else null,
+            phrasingStyle       = if (SongStep.PHRASING_STYLE in steps) PromptRepository.phrasingStyles.random() else null,
+            emotionalIntensity  = if (SongStep.EMOTIONAL_INTENSITY in steps) PromptRepository.emotionalIntensityOptions.random() else null,
+            chordProgression    = prog,
+            secondChordProgression = prog2,
+            songKey             = key,
+            renderedChords      = if (key != null && prog != null) ChordMapper.renderProgression(key, prog) else emptyList(),
+            secondRenderedChords = if (key != null && prog2 != null) ChordMapper.renderProgression(key, prog2) else emptyList(),
+            startingNote        = if (SongStep.STARTING_NOTE in steps) PromptRepository.startingNoteOptions.random() else null,
+            secondNoteDirection = if (SongStep.SECOND_NOTE_DIRECTION in steps) PromptRepository.secondNoteDirectionOptions.random() else null,
+            rhymeScheme         = if (SongStep.RHYME_SCHEME in steps) PromptRepository.rhymeSchemes.random() else null
+        )
+    }
 
     fun reset() {
         _songIdea.value = SongIdea()

@@ -22,6 +22,7 @@ class SettingsRepository(private val context: Context) {
         val PHRASING_STYLE = booleanPreferencesKey("phrasing_style")
         val EMOTIONAL_INTENSITY = booleanPreferencesKey("emotional_intensity")
         val CHORD_PROGRESSION = booleanPreferencesKey("chord_progression")
+        val SECOND_CHORD_PROGRESSION = booleanPreferencesKey("second_chord_progression")
         val SONG_KEY = booleanPreferencesKey("song_key")
         val STARTING_NOTE = booleanPreferencesKey("starting_note")
         val SECOND_NOTE_DIRECTION = booleanPreferencesKey("second_note_direction")
@@ -37,6 +38,7 @@ class SettingsRepository(private val context: Context) {
             phrasingStyleEnabled = prefs[Keys.PHRASING_STYLE] ?: true,
             emotionalIntensityEnabled = prefs[Keys.EMOTIONAL_INTENSITY] ?: true,
             chordProgressionEnabled = prefs[Keys.CHORD_PROGRESSION] ?: true,
+            secondChordProgressionEnabled = prefs[Keys.SECOND_CHORD_PROGRESSION] ?: false,
             songKeyEnabled = prefs[Keys.SONG_KEY] ?: true,
             startingNoteEnabled = prefs[Keys.STARTING_NOTE] ?: true,
             secondNoteDirectionEnabled = prefs[Keys.SECOND_NOTE_DIRECTION] ?: true,
@@ -53,6 +55,7 @@ class SettingsRepository(private val context: Context) {
             prefs[Keys.PHRASING_STYLE] = settings.phrasingStyleEnabled
             prefs[Keys.EMOTIONAL_INTENSITY] = settings.emotionalIntensityEnabled
             prefs[Keys.CHORD_PROGRESSION] = settings.chordProgressionEnabled
+            prefs[Keys.SECOND_CHORD_PROGRESSION] = settings.secondChordProgressionEnabled
             prefs[Keys.SONG_KEY] = settings.songKeyEnabled
             prefs[Keys.STARTING_NOTE] = settings.startingNoteEnabled
             prefs[Keys.SECOND_NOTE_DIRECTION] = settings.secondNoteDirectionEnabled

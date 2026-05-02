@@ -52,6 +52,10 @@ fun SongScaffoldApp() {
                     songIdeaViewModel.startSession(settings)
                     navController.navigate("step/0")
                 },
+                onRandomIdea = {
+                    songIdeaViewModel.randomizeAll(settings)
+                    navController.navigate("summary") { popUpTo("home") { inclusive = false } }
+                },
                 onSettings = { navController.navigate("settings") }
             )
         }
@@ -74,6 +78,7 @@ fun SongScaffoldApp() {
                 rhymeWord = songIdea.rhymeWord,
                 selectedOption = selectedOptionFor(step, songIdea),
                 selectedProgression = songIdea.chordProgression,
+                selectedSecondProgression = songIdea.secondChordProgression,
                 onTopicRandom = {
                     songIdeaViewModel.setTopic(songIdeaViewModel.randomTopic())
                 },
@@ -85,6 +90,9 @@ fun SongScaffoldApp() {
                 },
                 onProgressionSelected = { progression ->
                     songIdeaViewModel.setChordProgression(progression)
+                },
+                onSecondProgressionSelected = { progression ->
+                    songIdeaViewModel.setSecondChordProgression(progression)
                 },
                 onRandom = {
                     applyRandom(step, songIdeaViewModel)
@@ -112,6 +120,12 @@ fun SongScaffoldApp() {
                     songIdeaViewModel.startSession(settings)
                     navController.navigate("step/0") {
                         popUpTo("home") { inclusive = false }
+                    }
+                },
+                onRandomIdea = {
+                    songIdeaViewModel.randomizeAll(settings)
+                    navController.navigate("summary") {
+                        popUpTo("summary") { inclusive = true }
                     }
                 },
                 onHome = {
@@ -190,6 +204,7 @@ private fun applyRandom(step: SongStep, vm: SongIdeaViewModel) {
         SongStep.PHRASING_STYLE -> vm.setPhrasingStyle(PromptRepository.phrasingStyles.random())
         SongStep.EMOTIONAL_INTENSITY -> vm.setEmotionalIntensity(PromptRepository.emotionalIntensityOptions.random())
         SongStep.CHORD_PROGRESSION -> vm.setChordProgression(PromptRepository.chordProgressions.random())
+        SongStep.SECOND_CHORD_PROGRESSION -> vm.setSecondChordProgression(PromptRepository.chordProgressions.random())
         SongStep.SONG_KEY -> vm.setSongKey(PromptRepository.majorKeys.random())
         SongStep.STARTING_NOTE -> vm.setStartingNote(PromptRepository.startingNoteOptions.random())
         SongStep.SECOND_NOTE_DIRECTION -> vm.setSecondNoteDirection(PromptRepository.secondNoteDirectionOptions.random())

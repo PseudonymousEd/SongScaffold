@@ -53,10 +53,12 @@ fun StepScreen(
     rhymeWord: String?,
     selectedOption: String?,
     selectedProgression: ChordProgression?,
+    selectedSecondProgression: ChordProgression?,
     onTopicRandom: () -> Unit,
     onRhymeWordRandom: () -> Unit,
     onOptionSelected: (String) -> Unit,
     onProgressionSelected: (ChordProgression) -> Unit,
+    onSecondProgressionSelected: (ChordProgression) -> Unit,
     onRandom: () -> Unit,
     onSkip: () -> Unit,
     onNext: () -> Unit,
@@ -125,6 +127,10 @@ fun StepScreen(
                         selected = selectedProgression,
                         onSelect = onProgressionSelected
                     )
+                    SongStep.SECOND_CHORD_PROGRESSION -> ChordProgressionStepContent(
+                        selected = selectedSecondProgression,
+                        onSelect = onSecondProgressionSelected
+                    )
                     else -> OptionListStepContent(
                         options = optionsFor(step),
                         selected = selectedOption,
@@ -148,7 +154,8 @@ fun StepScreen(
                 ) {
                     Text("Skip")
                 }
-                if (step != SongStep.TOPIC && step != SongStep.RHYME_WORD) {
+                if (step != SongStep.TOPIC && step != SongStep.RHYME_WORD &&
+                    step != SongStep.CHORD_PROGRESSION && step != SongStep.SECOND_CHORD_PROGRESSION) {
                     OutlinedButton(
                         onClick = onRandom,
                         modifier = Modifier.weight(1f)
@@ -426,6 +433,10 @@ private fun stepMeta(step: SongStep): StepMeta = when (step) {
     SongStep.CHORD_PROGRESSION -> StepMeta(
         "Chord Progression",
         "The harmonic structure for the song."
+    )
+    SongStep.SECOND_CHORD_PROGRESSION -> StepMeta(
+        "Second Chord Progression",
+        "Pick a second chord progression (e.g. for the chorus)."
     )
     SongStep.SONG_KEY -> StepMeta(
         "Song Key",

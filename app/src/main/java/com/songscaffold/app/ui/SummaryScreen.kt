@@ -33,6 +33,7 @@ import com.songscaffold.app.model.SongIdea
 fun SummaryScreen(
     songIdea: SongIdea,
     onStartOver: () -> Unit,
+    onRandomIdea: () -> Unit,
     onHome: () -> Unit
 ) {
     Scaffold(
@@ -82,19 +83,33 @@ fun SummaryScreen(
                         SummaryRow(label = "Emotional Intensity", value = it)
                     }
 
-                    val hasChordSection = songIdea.chordProgression != null || songIdea.songKey != null
+                    val hasChordSection = songIdea.chordProgression != null ||
+                        songIdea.secondChordProgression != null || songIdea.songKey != null
                     if (hasChordSection) {
                         HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+                        val hasTwo = songIdea.secondChordProgression != null
                         songIdea.chordProgression?.let {
-                            SummaryRow(label = "Chord Progression", value = it.romanDisplay)
+                            SummaryRow(
+                                label = if (hasTwo) "Chord Prog. 1" else "Chord Progression",
+                                value = it.romanDisplay
+                            )
+                        }
+                        songIdea.secondChordProgression?.let {
+                            SummaryRow(label = "Chord Prog. 2", value = it.romanDisplay)
                         }
                         songIdea.songKey?.let {
                             SummaryRow(label = "Key", value = it)
                         }
                         if (songIdea.renderedChords.isNotEmpty()) {
                             SummaryRow(
-                                label = "Chords",
+                                label = if (hasTwo) "Chords 1" else "Chords",
                                 value = songIdea.renderedChords.joinToString(" – ")
+                            )
+                        }
+                        if (songIdea.secondRenderedChords.isNotEmpty()) {
+                            SummaryRow(
+                                label = "Chords 2",
+                                value = songIdea.secondRenderedChords.joinToString(" – ")
                             )
                         }
                     }
@@ -128,6 +143,12 @@ fun SummaryScreen(
                     modifier = Modifier.weight(1f)
                 ) {
                     Text("Start Over")
+                }
+                OutlinedButton(
+                    onClick = onRandomIdea,
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text("Random Idea")
                 }
                 Button(
                     onClick = onHome,
