@@ -148,7 +148,7 @@ fun SummaryScreen(
                     onClick = onRandomIdea,
                     modifier = Modifier.weight(1f)
                 ) {
-                    Text("Random Idea")
+                    Text("Random")
                 }
                 Button(
                     onClick = onHome,
