@@ -33,6 +33,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
@@ -49,9 +50,11 @@ fun StepScreen(
     stepIndex: Int,
     totalSteps: Int,
     topic: TopicPrompt?,
+    rhymeWord: String?,
     selectedOption: String?,
     selectedProgression: ChordProgression?,
     onTopicRandom: () -> Unit,
+    onRhymeWordRandom: () -> Unit,
     onOptionSelected: (String) -> Unit,
     onProgressionSelected: (ChordProgression) -> Unit,
     onRandom: () -> Unit,
@@ -114,6 +117,10 @@ fun StepScreen(
                         topic = topic,
                         onRandom = onTopicRandom
                     )
+                    SongStep.RHYME_WORD -> RhymeWordStepContent(
+                        word = rhymeWord,
+                        onRandom = onRhymeWordRandom
+                    )
                     SongStep.CHORD_PROGRESSION -> ChordProgressionStepContent(
                         selected = selectedProgression,
                         onSelect = onProgressionSelected
@@ -141,7 +148,7 @@ fun StepScreen(
                 ) {
                     Text("Skip")
                 }
-                if (step != SongStep.TOPIC) {
+                if (step != SongStep.TOPIC && step != SongStep.RHYME_WORD) {
                     OutlinedButton(
                         onClick = onRandom,
                         modifier = Modifier.weight(1f)
@@ -215,6 +222,65 @@ fun TopicStepContent(
         ) {
             Text(
                 text = if (topic != null) "New Random Topic" else "Random Topic",
+                style = MaterialTheme.typography.titleLarge
+            )
+        }
+    }
+}
+
+@Composable
+fun RhymeWordStepContent(
+    word: String?,
+    onRandom: () -> Unit
+) {
+    LaunchedEffect(Unit) {
+        if (word == null) onRandom()
+    }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(24.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        if (word != null) {
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant
+                )
+            ) {
+                Column(
+                    modifier = Modifier.padding(20.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = word,
+                        style = MaterialTheme.typography.displaySmall,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.height(24.dp))
+        } else {
+            Text(
+                text = "Tap Random Word to get started",
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                fontStyle = FontStyle.Italic
+            )
+            Spacer(modifier = Modifier.height(24.dp))
+        }
+
+        Button(
+            onClick = onRandom,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(52.dp)
+        ) {
+            Text(
+                text = if (word != null) "New Random Word" else "Random Word",
                 style = MaterialTheme.typography.titleLarge
             )
         }
@@ -336,6 +402,10 @@ private fun stepMeta(step: SongStep): StepMeta = when (step) {
     SongStep.TOPIC -> StepMeta(
         "Topic",
         "The central idea or image for your song."
+    )
+    SongStep.RHYME_WORD -> StepMeta(
+        "Rhyme Word",
+        "Pick a word your song should rhyme with."
     )
     SongStep.POINT_OF_VIEW -> StepMeta(
         "Point of View",

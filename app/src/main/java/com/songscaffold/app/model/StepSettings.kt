@@ -2,6 +2,7 @@ package com.songscaffold.app.model
 
 data class StepSettings(
     val topicEnabled: Boolean = true,
+    val rhymeWordEnabled: Boolean = true,
     val pointOfViewEnabled: Boolean = true,
     val deliveryModeEnabled: Boolean = true,
     val phrasingStyleEnabled: Boolean = true,

@@ -16,6 +16,7 @@ class SettingsRepository(private val context: Context) {
 
     private object Keys {
         val TOPIC = booleanPreferencesKey("topic")
+        val RHYME_WORD = booleanPreferencesKey("rhyme_word")
         val POINT_OF_VIEW = booleanPreferencesKey("point_of_view")
         val DELIVERY_MODE = booleanPreferencesKey("delivery_mode")
         val PHRASING_STYLE = booleanPreferencesKey("phrasing_style")
@@ -30,6 +31,7 @@ class SettingsRepository(private val context: Context) {
     val stepSettings: Flow<StepSettings> = context.dataStore.data.map { prefs ->
         StepSettings(
             topicEnabled = prefs[Keys.TOPIC] ?: true,
+            rhymeWordEnabled = prefs[Keys.RHYME_WORD] ?: true,
             pointOfViewEnabled = prefs[Keys.POINT_OF_VIEW] ?: true,
             deliveryModeEnabled = prefs[Keys.DELIVERY_MODE] ?: true,
             phrasingStyleEnabled = prefs[Keys.PHRASING_STYLE] ?: true,
@@ -45,6 +47,7 @@ class SettingsRepository(private val context: Context) {
     suspend fun updateSettings(settings: StepSettings) {
         context.dataStore.edit { prefs ->
             prefs[Keys.TOPIC] = settings.topicEnabled
+            prefs[Keys.RHYME_WORD] = settings.rhymeWordEnabled
             prefs[Keys.POINT_OF_VIEW] = settings.pointOfViewEnabled
             prefs[Keys.DELIVERY_MODE] = settings.deliveryModeEnabled
             prefs[Keys.PHRASING_STYLE] = settings.phrasingStyleEnabled

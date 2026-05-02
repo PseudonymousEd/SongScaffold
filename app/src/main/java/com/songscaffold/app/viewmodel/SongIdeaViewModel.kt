@@ -28,6 +28,7 @@ class SongIdeaViewModel : ViewModel() {
 
     private fun buildEnabledSteps(s: StepSettings): List<SongStep> = buildList {
         if (s.topicEnabled) add(SongStep.TOPIC)
+        if (s.rhymeWordEnabled) add(SongStep.RHYME_WORD)
         if (s.pointOfViewEnabled) add(SongStep.POINT_OF_VIEW)
         if (s.deliveryModeEnabled) add(SongStep.DELIVERY_MODE)
         if (s.phrasingStyleEnabled) add(SongStep.PHRASING_STYLE)
@@ -41,6 +42,8 @@ class SongIdeaViewModel : ViewModel() {
     }
 
     fun setTopic(topic: TopicPrompt) = _songIdea.update { it.copy(topic = topic) }
+
+    fun setRhymeWord(value: String) = _songIdea.update { it.copy(rhymeWord = value) }
 
     fun setPointOfView(value: String) = _songIdea.update { it.copy(pointOfView = value) }
 
@@ -71,6 +74,8 @@ class SongIdeaViewModel : ViewModel() {
     fun setRhymeScheme(value: String) = _songIdea.update { it.copy(rhymeScheme = value) }
 
     fun randomTopic(): TopicPrompt = PromptRepository.topics.random()
+
+    fun randomRhymeWord(): String = PromptRepository.rhymeWords.random()
 
     fun reset() {
         _songIdea.value = SongIdea()

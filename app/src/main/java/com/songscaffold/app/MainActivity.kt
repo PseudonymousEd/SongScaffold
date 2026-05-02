@@ -71,10 +71,14 @@ fun SongScaffoldApp() {
                 stepIndex = stepIndex,
                 totalSteps = enabledSteps.size,
                 topic = songIdea.topic,
+                rhymeWord = songIdea.rhymeWord,
                 selectedOption = selectedOptionFor(step, songIdea),
                 selectedProgression = songIdea.chordProgression,
                 onTopicRandom = {
                     songIdeaViewModel.setTopic(songIdeaViewModel.randomTopic())
+                },
+                onRhymeWordRandom = {
+                    songIdeaViewModel.setRhymeWord(songIdeaViewModel.randomRhymeWord())
                 },
                 onOptionSelected = { option ->
                     applyOption(step, option, songIdeaViewModel)
@@ -180,6 +184,7 @@ private fun applyOption(step: SongStep, option: String, vm: SongIdeaViewModel) {
 
 private fun applyRandom(step: SongStep, vm: SongIdeaViewModel) {
     when (step) {
+        SongStep.RHYME_WORD -> vm.setRhymeWord(vm.randomRhymeWord())
         SongStep.POINT_OF_VIEW -> vm.setPointOfView(PromptRepository.pointOfViewOptions.random())
         SongStep.DELIVERY_MODE -> vm.setDeliveryMode(PromptRepository.deliveryModes.random())
         SongStep.PHRASING_STYLE -> vm.setPhrasingStyle(PromptRepository.phrasingStyles.random())

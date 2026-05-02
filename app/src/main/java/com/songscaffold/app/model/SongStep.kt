@@ -2,6 +2,7 @@ package com.songscaffold.app.model
 
 enum class SongStep {
     TOPIC,
+    RHYME_WORD,
     POINT_OF_VIEW,
     DELIVERY_MODE,
     PHRASING_STYLE,

@@ -65,6 +65,10 @@ fun SummaryScreen(
                         SummaryRow(label = "Source", value = it.category.displayName)
                         HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
                     }
+                    songIdea.rhymeWord?.let {
+                        SummaryRow(label = "Rhyme Word", value = it)
+                        HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+                    }
                     songIdea.pointOfView?.let {
                         SummaryRow(label = "Point of View", value = it)
                     }

@@ -2,6 +2,7 @@ package com.songscaffold.app.model
 
 data class SongIdea(
     val topic: TopicPrompt? = null,
+    val rhymeWord: String? = null,
     val pointOfView: String? = null,
     val deliveryMode: String? = null,
     val phrasingStyle: String? = null,

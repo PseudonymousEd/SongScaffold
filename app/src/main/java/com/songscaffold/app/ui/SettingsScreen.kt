@@ -67,6 +67,9 @@ fun SettingsScreen(
             SettingsToggleRow("Topic", settings.topicEnabled) {
                 onToggle { s -> s.copy(topicEnabled = it) }
             }
+            SettingsToggleRow("Rhyme Word", settings.rhymeWordEnabled) {
+                onToggle { s -> s.copy(rhymeWordEnabled = it) }
+            }
             SettingsToggleRow("Point of View", settings.pointOfViewEnabled) {
                 onToggle { s -> s.copy(pointOfViewEnabled = it) }
             }
