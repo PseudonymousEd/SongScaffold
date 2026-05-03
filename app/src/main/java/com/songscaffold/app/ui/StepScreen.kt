@@ -154,8 +154,7 @@ fun StepScreen(
                 ) {
                     Text("Skip")
                 }
-                if (step != SongStep.TOPIC && step != SongStep.RHYME_WORD &&
-                    step != SongStep.CHORD_PROGRESSION && step != SongStep.SECOND_CHORD_PROGRESSION) {
+                if (step != SongStep.TOPIC && step != SongStep.RHYME_WORD) {
                     OutlinedButton(
                         onClick = onRandom,
                         modifier = Modifier.weight(1f)
