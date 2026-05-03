@@ -91,11 +91,16 @@ fun SummaryScreen(
                         songIdea.chordProgression?.let {
                             SummaryRow(
                                 label = if (hasTwo) "Chord Prog. 1" else "Chord Progression",
+                                value = it.name
+                            )
+                            SummaryRow(
+                                label = if (hasTwo) "Pattern 1" else "Pattern",
                                 value = it.romanDisplay
                             )
                         }
                         songIdea.secondChordProgression?.let {
-                            SummaryRow(label = "Chord Prog. 2", value = it.romanDisplay)
+                            SummaryRow(label = "Chord Prog. 2", value = it.name)
+                            SummaryRow(label = "Pattern 2", value = it.romanDisplay)
                         }
                         songIdea.songKey?.let {
                             SummaryRow(label = "Key", value = it)

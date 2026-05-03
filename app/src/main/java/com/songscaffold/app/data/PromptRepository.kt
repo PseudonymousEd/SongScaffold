@@ -156,7 +156,7 @@ object PromptRepository {
         ChordProgression("Two Five One",           "Musical Theatre / Jazz",  listOf("ii", "V", "I")),
         ChordProgression("Circle Turnaround",      "Musical Theatre / Jazz",  listOf("I", "vi", "ii", "V")),
         ChordProgression("Extended Turnaround",    "Musical Theatre / Jazz",  listOf("iii", "vi", "ii", "V")),
-        ChordProgression("Borrowed Minor Four",    "Musical Theatre / Jazz",  listOf("I", "I7", "IV", "iv")),
+        ChordProgression("Borrowed Minor Four",    "Musical Theatre / Jazz",  listOf("I", "Imaj7", "IV", "iv")),
 
         ChordProgression("Secondary Dominant Lift","Expressive / Color",      listOf("I", "V/vi", "vi", "IV")),
         ChordProgression("Major To Minor Four",    "Expressive / Color",      listOf("I", "IV", "iv", "I")),
@@ -164,7 +164,34 @@ object PromptRepository {
         ChordProgression("Flat Seven Color",       "Expressive / Color",      listOf("I", "♭VII", "IV", "I")),
 
         ChordProgression("Two Chord Open Loop",    "Loops",                   listOf("I", "IV")),
-        ChordProgression("Two Five Loop",          "Loops",                   listOf("ii", "V"))
+        ChordProgression("Two Five Loop",          "Loops",                   listOf("ii", "V")),
+
+        ChordProgression("50s Progression",          "Classic / Standard",      listOf("I", "vi", "IV", "V")),
+        ChordProgression("Plagal Loop",              "Classic / Standard",      listOf("IV", "I", "V", "I")),
+        ChordProgression("Descending Bass Line",     "Classic / Standard",      listOf("I", "V/7", "vi", "V")),
+        ChordProgression("Axis Variant",             "Classic / Standard",      listOf("vi", "V", "IV", "I")),
+
+        ChordProgression("Backdoor Resolution",      "Musical Theatre / Jazz",  listOf("ii", "♭VII", "I")),
+        ChordProgression("Rhythm Changes",           "Musical Theatre / Jazz",  listOf("I", "vi", "ii", "V")),
+        ChordProgression("Minor Two Five One",       "Musical Theatre / Jazz",  listOf("iiø", "V7", "i")),
+        ChordProgression("Chromatic Walk-Up",        "Musical Theatre / Jazz",  listOf("I", "I#dim", "ii", "V")),
+
+        ChordProgression("Line Cliche Major",        "Expressive / Color",      listOf("I", "Imaj7", "I7", "IV")),
+        ChordProgression("Mixolydian Variant",       "Expressive / Color",      listOf("I", "♭VII", "I", "IV")),
+        ChordProgression("Chromatic Mediants",       "Expressive / Color",      listOf("I", "♭III", "IV", "I")),
+        ChordProgression("Deceptive Cycle",          "Expressive / Color",      listOf("V", "vi", "IV", "I")),
+
+        ChordProgression("Drone Loop",               "Loops",                   listOf("I", "♭VII")),
+        ChordProgression("Suspended Loop",           "Loops",                   listOf("I", "Vsus4")),
+        ChordProgression("Minor Oscillation",        "Loops",                   listOf("i", "♭VI")),
+        ChordProgression("Pedal Loop",               "Loops",                   listOf("I", "ii/I", "IV/I", "V/I")),
+
+        ChordProgression("Epic Rise",                "Cinematic / Modern",      listOf("vi", "IV", "I", "V")),
+        ChordProgression("Modern Film Loop",         "Cinematic / Modern",      listOf("i", "♭VI", "III", "♭VII")),
+        ChordProgression("Lydian Lift",              "Cinematic / Modern",      listOf("I", "II", "IV", "I")),
+        ChordProgression("Ambiguous Loop",           "Cinematic / Modern",      listOf("I", "V", "ii", "IV"))
+
+
     )
 
     val pointOfViewOptions = listOf(

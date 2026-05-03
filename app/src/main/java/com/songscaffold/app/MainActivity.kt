@@ -204,7 +204,9 @@ private fun applyRandom(step: SongStep, vm: SongIdeaViewModel) {
         SongStep.PHRASING_STYLE -> vm.setPhrasingStyle(PromptRepository.phrasingStyles.random())
         SongStep.EMOTIONAL_INTENSITY -> vm.setEmotionalIntensity(PromptRepository.emotionalIntensityOptions.random())
         SongStep.CHORD_PROGRESSION -> vm.setChordProgression(PromptRepository.chordProgressions.random())
-        SongStep.SECOND_CHORD_PROGRESSION -> vm.setSecondChordProgression(PromptRepository.chordProgressions.random())
+        SongStep.SECOND_CHORD_PROGRESSION -> vm.setSecondChordProgression(
+            PromptRepository.chordProgressions.filter { it != vm.songIdea.value.chordProgression }.random()
+        )
         SongStep.SONG_KEY -> vm.setSongKey(PromptRepository.majorKeys.random())
         SongStep.STARTING_NOTE -> vm.setStartingNote(PromptRepository.startingNoteOptions.random())
         SongStep.SECOND_NOTE_DIRECTION -> vm.setSecondNoteDirection(PromptRepository.secondNoteDirectionOptions.random())

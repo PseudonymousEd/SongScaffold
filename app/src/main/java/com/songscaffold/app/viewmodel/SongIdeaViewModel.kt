@@ -91,7 +91,9 @@ class SongIdeaViewModel : ViewModel() {
         _enabledSteps.value = steps
         val key   = if (SongStep.SONG_KEY in steps) PromptRepository.majorKeys.random() else null
         val prog  = if (SongStep.CHORD_PROGRESSION in steps) PromptRepository.chordProgressions.random() else null
-        val prog2 = if (SongStep.SECOND_CHORD_PROGRESSION in steps) PromptRepository.chordProgressions.random() else null
+        val prog2 = if (SongStep.SECOND_CHORD_PROGRESSION in steps)
+            PromptRepository.chordProgressions.filter { it != prog }.random()
+        else null
         _songIdea.value = SongIdea(
             topic               = if (SongStep.TOPIC in steps) PromptRepository.topics.random() else null,
             rhymeWord           = if (SongStep.RHYME_WORD in steps) PromptRepository.rhymeWords.random() else null,
