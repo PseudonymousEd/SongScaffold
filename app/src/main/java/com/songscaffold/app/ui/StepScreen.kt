@@ -54,6 +54,7 @@ fun StepScreen(
     selectedOption: String?,
     selectedProgression: ChordProgression?,
     selectedSecondProgression: ChordProgression?,
+    chordProgressions: List<ChordProgression>,
     onTopicRandom: () -> Unit,
     onRhymeWordRandom: () -> Unit,
     onOptionSelected: (String) -> Unit,
@@ -125,10 +126,12 @@ fun StepScreen(
                     )
                     SongStep.CHORD_PROGRESSION -> ChordProgressionStepContent(
                         selected = selectedProgression,
+                        progressions = chordProgressions,
                         onSelect = onProgressionSelected
                     )
                     SongStep.SECOND_CHORD_PROGRESSION -> ChordProgressionStepContent(
                         selected = selectedSecondProgression,
+                        progressions = chordProgressions,
                         onSelect = onSecondProgressionSelected
                     )
                     else -> OptionListStepContent(
@@ -341,9 +344,9 @@ fun OptionListStepContent(
 @Composable
 fun ChordProgressionStepContent(
     selected: ChordProgression?,
+    progressions: List<ChordProgression>,
     onSelect: (ChordProgression) -> Unit
 ) {
-    val progressions = com.songscaffold.app.data.PromptRepository.chordProgressions
     val grouped = progressions.groupBy { it.category }
 
     LazyColumn(

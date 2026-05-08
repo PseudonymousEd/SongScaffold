@@ -110,6 +110,20 @@ fun SettingsScreen(
             SettingsToggleRow("Rhyme Scheme", settings.rhymeSchemeEnabled) {
                 onToggle { s -> s.copy(rhymeSchemeEnabled = it) }
             }
+
+            Text(
+                text = "Chord Progression Options",
+                style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
+            )
+            HorizontalDivider()
+
+            SettingsToggleRow(
+                label = "Disable 2-chord chord progressions",
+                checked = settings.disableTwoChordProgressions
+            ) {
+                onToggle { s -> s.copy(disableTwoChordProgressions = it) }
+            }
         }
     }
 }

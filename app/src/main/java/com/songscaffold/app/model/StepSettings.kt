@@ -12,5 +12,6 @@ data class StepSettings(
     val songKeyEnabled: Boolean = true,
     val startingNoteEnabled: Boolean = true,
     val secondNoteDirectionEnabled: Boolean = true,
-    val rhymeSchemeEnabled: Boolean = true
+    val rhymeSchemeEnabled: Boolean = true,
+    val disableTwoChordProgressions: Boolean = false
 )

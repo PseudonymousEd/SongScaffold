@@ -14,6 +14,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.songscaffold.app.data.PromptRepository
 import com.songscaffold.app.model.SongStep
+import com.songscaffold.app.model.StepSettings
 import com.songscaffold.app.ui.HomeScreen
 import com.songscaffold.app.ui.SettingsScreen
 import com.songscaffold.app.ui.StepScreen
@@ -69,6 +70,9 @@ fun SongScaffoldApp() {
             }
 
             val step = enabledSteps[stepIndex]
+            val chordProgressions = PromptRepository.availableChordProgressions(
+                settings.disableTwoChordProgressions
+            )
 
             StepScreen(
                 step = step,
@@ -79,6 +83,7 @@ fun SongScaffoldApp() {
                 selectedOption = selectedOptionFor(step, songIdea),
                 selectedProgression = songIdea.chordProgression,
                 selectedSecondProgression = songIdea.secondChordProgression,
+                chordProgressions = chordProgressions,
                 onTopicRandom = {
                     songIdeaViewModel.setTopic(songIdeaViewModel.randomTopic())
                 },
@@ -95,7 +100,7 @@ fun SongScaffoldApp() {
                     songIdeaViewModel.setSecondChordProgression(progression)
                 },
                 onRandom = {
-                    applyRandom(step, songIdeaViewModel)
+                    applyRandom(step, songIdeaViewModel, settings)
                 },
                 onSkip = {
                     navigateStep(navController, stepIndex, enabledSteps, forward = true)
@@ -196,17 +201,21 @@ private fun applyOption(step: SongStep, option: String, vm: SongIdeaViewModel) {
     }
 }
 
-private fun applyRandom(step: SongStep, vm: SongIdeaViewModel) {
+private fun applyRandom(step: SongStep, vm: SongIdeaViewModel, settings: StepSettings) {
+    val chordProgressions = PromptRepository.availableChordProgressions(
+        settings.disableTwoChordProgressions
+    )
     when (step) {
         SongStep.RHYME_WORD -> vm.setRhymeWord(vm.randomRhymeWord())
         SongStep.POINT_OF_VIEW -> vm.setPointOfView(PromptRepository.pointOfViewOptions.random())
         SongStep.DELIVERY_MODE -> vm.setDeliveryMode(PromptRepository.deliveryModes.random())
         SongStep.PHRASING_STYLE -> vm.setPhrasingStyle(PromptRepository.phrasingStyles.random())
         SongStep.EMOTIONAL_INTENSITY -> vm.setEmotionalIntensity(PromptRepository.emotionalIntensityOptions.random())
-        SongStep.CHORD_PROGRESSION -> vm.setChordProgression(PromptRepository.chordProgressions.random())
-        SongStep.SECOND_CHORD_PROGRESSION -> vm.setSecondChordProgression(
-            PromptRepository.chordProgressions.filter { it != vm.songIdea.value.chordProgression }.random()
-        )
+        SongStep.CHORD_PROGRESSION -> chordProgressions.randomOrNull()?.let(vm::setChordProgression)
+        SongStep.SECOND_CHORD_PROGRESSION -> chordProgressions
+            .filter { it != vm.songIdea.value.chordProgression }
+            .randomOrNull()
+            ?.let(vm::setSecondChordProgression)
         SongStep.SONG_KEY -> vm.setSongKey(PromptRepository.majorKeys.random())
         SongStep.STARTING_NOTE -> vm.setStartingNote(PromptRepository.startingNoteOptions.random())
         SongStep.SECOND_NOTE_DIRECTION -> vm.setSecondNoteDirection(PromptRepository.secondNoteDirectionOptions.random())

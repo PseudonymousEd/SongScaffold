@@ -194,6 +194,16 @@ object PromptRepository {
 
     )
 
+    fun availableChordProgressions(disableTwoChordProgressions: Boolean): List<ChordProgression> =
+        if (disableTwoChordProgressions) {
+            chordProgressions.filterNot(::isTwoChordProgression)
+        } else {
+            chordProgressions
+        }
+
+    fun isTwoChordProgression(progression: ChordProgression): Boolean =
+        progression.romanNumerals.size == 2
+
     val pointOfViewOptions = listOf(
         "First person — I / me / my",
         "Second person — you",
