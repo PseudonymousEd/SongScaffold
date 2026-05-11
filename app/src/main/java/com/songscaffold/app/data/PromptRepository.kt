@@ -175,6 +175,7 @@ object PromptRepository {
         ChordProgression("Rhythm Changes",           "Musical Theatre / Jazz",  listOf("I", "vi", "ii", "V")),
         ChordProgression("Minor Two Five One",       "Musical Theatre / Jazz",  listOf("iiø", "V7", "i")),
         ChordProgression("Chromatic Walk-Up",        "Musical Theatre / Jazz",  listOf("I", "I#dim", "ii", "V")),
+        ChordProgression("Major Six Turnaround",     "Musical Theatre / Jazz",  listOf("I", "VI", "ii", "I")),
 
         ChordProgression("Line Cliche Major",        "Expressive / Color",      listOf("I", "Imaj7", "I7", "IV")),
         ChordProgression("Mixolydian Variant",       "Expressive / Color",      listOf("I", "♭VII", "I", "IV")),
