@@ -1,6 +1,6 @@
 # DevCycle 006: Improve Chord Progression Steps
 
-**Status:** Planning
+**Status:** Work Complete
 **Start Date:** 2026-05-11
 **Target Completion:** 2026-05-11
 **Focus:** Make chord progression selection more musically intentional, then add an optional third rendered chord section transposed one whole step above the song key.
@@ -30,22 +30,22 @@ This cycle should make the chord progression steps feel more musically purposefu
 
 ### Phase 1: Role-Aware First and Second Chord Progressions
 
-**Status:** Planning
+**Status:** Work Complete
 
-- [ ] Review and implement the recommendations in `doc/planning/ideas/separate_chord_progressions_plan.md`.
-- [ ] Treat this DevCycle document as the canonical implementation plan where it differs from older exploratory notes.
-- [ ] Add `VI` support to `ChordMapper` for every supported key before relying on `Major Six Turnaround`.
-- [ ] Add a suitability model for chord progressions, using harmonic-behavior tags rather than section-name tags.
-- [ ] Tag every existing progression intentionally; avoid leaving finished data with an empty suitability set.
-- [ ] Preserve the existing `category` field for style grouping.
-- [ ] Add shared repository accessors for first-step and second-step progression candidates.
-- [ ] Ensure the existing `disableTwoChordProgressions` setting applies to both first and second candidate pools.
-- [ ] Update manual Chord Progression 1 selection to use the first/open/setup-oriented pool.
-- [ ] Update manual Chord Progression 2 selection to use the second/payoff/contrast-oriented pool.
-- [ ] Update `Random Idea` generation to use the role-aware pools.
-- [ ] Update per-step randomization to use the role-aware pools.
-- [ ] Avoid selecting the exact same progression twice when possible.
-- [ ] Implement shared fallback helpers so manual/random candidate rules cannot drift.
+- [x] Review and implement the recommendations in `doc/planning/ideas/separate_chord_progressions_plan.md`.
+- [x] Treat this DevCycle document as the canonical implementation plan where it differs from older exploratory notes.
+- [x] Add `VI` support to `ChordMapper` for every supported key before relying on `Major Six Turnaround`.
+- [x] Add a suitability model for chord progressions, using harmonic-behavior tags rather than section-name tags.
+- [x] Tag every existing progression intentionally; avoid leaving finished data with an empty suitability set.
+- [x] Preserve the existing `category` field for style grouping.
+- [x] Add shared repository accessors for first-step and second-step progression candidates.
+- [x] Ensure the existing `disableTwoChordProgressions` setting applies to both first and second candidate pools.
+- [x] Update manual Chord Progression 1 selection to use the first/open/setup-oriented pool.
+- [x] Update manual Chord Progression 2 selection to use the second/payoff/contrast-oriented pool.
+- [x] Update `Random Idea` generation to use the role-aware pools.
+- [x] Update per-step randomization to use the role-aware pools.
+- [x] Avoid selecting the exact same progression twice when possible.
+- [x] Implement shared fallback helpers so manual/random candidate rules cannot drift.
 
 **Technical Notes:**
 Primary files are likely:
@@ -81,18 +81,18 @@ The same helper should be used by full Random Idea generation and per-step rando
 
 ### Phase 2: Optional Chord Progression 3 Summary Section
 
-**Status:** Planning
+**Status:** Work Complete
 
-- [ ] Add `enableChordProgression3` or similarly named Boolean to `StepSettings`, defaulting to `false`.
-- [ ] Add a DataStore key for the new setting in `SettingsRepository`.
-- [ ] Persist the setting alongside the existing chord progression options.
-- [ ] Add a Settings screen toggle labeled `Enable Chord Progression 3` under `Chord Progression Options`.
-- [ ] Disable or clearly gate the toggle when Chord Progression is disabled, because Chord Progression 3 depends on Chord Progression 1.
-- [ ] Render a `Chords 3` row in the final Song Idea when the setting is enabled and Chord Progression 1 plus Song Key are available.
-- [ ] Compute `Chords 3` by rendering Chord Progression 1 in the key one full step higher than the selected song key.
-- [ ] Ensure the transposed key wraps correctly through the existing `PromptRepository.majorKeys` list.
-- [ ] Show the transposed key label alongside `Chords 3` if the row can stay compact.
-- [ ] Verify `Chords 3` updates correctly when the user changes Chord Progression 1 or Song Key.
+- [x] Add `enableChordProgression3` or similarly named Boolean to `StepSettings`, defaulting to `false`.
+- [x] Add a DataStore key for the new setting in `SettingsRepository`.
+- [x] Persist the setting alongside the existing chord progression options.
+- [x] Add a Settings screen toggle labeled `Enable Chord Progression 3` under `Chord Progression Options`.
+- [x] Disable or clearly gate the toggle when Chord Progression is disabled, because Chord Progression 3 depends on Chord Progression 1.
+- [x] Render a `Chords 3` row in the final Song Idea when the setting is enabled and Chord Progression 1 plus Song Key are available.
+- [x] Compute `Chords 3` by rendering Chord Progression 1 in the key one full step higher than the selected song key.
+- [x] Ensure the transposed key wraps correctly through the existing `PromptRepository.majorKeys` list.
+- [x] Show the transposed key label alongside `Chords 3` if the row can stay compact.
+- [x] Verify `Chords 3` updates correctly when the user changes Chord Progression 1 or Song Key.
 
 **Technical Notes:**
 Primary files are likely:
@@ -134,9 +134,9 @@ This feature depends on Song Key. If no song key is selected or rendered, the ap
 
 ### Phase 3: Verification
 
-**Status:** Planning
+**Status:** Work Complete
 
-- [ ] Build with `.\gradlew.bat assembleDebug`.
+- [x] Build with `.\gradlew.bat assembleDebug`.
 - [ ] Manually verify first and second progression steps show their intended candidate pools.
 - [ ] Manually verify Random Idea uses different first/second candidate pools.
 - [ ] Manually verify per-step Random uses the correct pool for each progression step.
@@ -202,21 +202,64 @@ Phase 1 steers Chord Progression 1 toward `OPEN` and `LOOP` progressions — one
 
 ---
 
+## Claude Code Review
+
+### Separator inconsistency in SummaryScreen
+
+`SummaryScreen.kt` lines 127–130 join rendered chords using `" – "` (en dash) for Chords 1 and Chords 2. Line 139 joins Chords 3 using `" - "` (hyphen). These will look visually different on screen. The Chords 3 line should use `" – "` to match.
+
+### `supportedMajorKeys` in ChordMapper duplicates `PromptRepository.majorKeys`
+
+`ChordMapper` declares its own private `supportedMajorKeys` list rather than referencing `PromptRepository.majorKeys`. Both lists are identical and in the same order. If the supported key set ever changes in one place, the other could silently go out of sync and produce incorrect transpositions. `ChordMapper` could instead accept a key list as a parameter or reference the repository list directly — though given the app's current scope the duplication is low risk, it is worth being aware of.
+
+### Pool overlap is wider than it may appear
+
+`COLOR` appears in both `firstProgressionSuitability` and `secondProgressionSuitability`, and many progressions carry a COLOR tag. The practical result is that 27 of 33 progressions qualify for the first pool and 30 of 33 qualify for the second. A user selecting manually will see nearly identical lists for both steps. The bias is musically real — Classic Cadence, Two Five One, Plagal Loop, Minor To Resolution, Axis Variant, and Deceptive Cycle are correctly excluded from the first pool, and the three pure loop progressions are excluded from the second — but the differentiation is subtler than the planning documents implied. This is not a bug, and the "bias not a rule" framing from the plan document accurately describes what was built. Worth knowing if the pools feel underdifferentiated in use.
+
+### Second Chord Progression step description was not updated
+
+The DevCycle plan noted that the second progression step description could be changed from `"Pick a second chord progression (e.g. for the chorus)."` to something more intentional like `"Pick a contrasting progression for the next section."` The original text remains in `StepScreen.kt` line 442. This is a minor missed item — not a bug, but an easy follow-up if the "for the chorus" framing feels too narrow.
+
+### `suitability` field has no default value — this is correct
+
+`ChordProgression.suitability` is declared as `Set<ChordProgressionSuitability>` with no default. This means every progression must provide tags at construction time and there is no way to accidentally create an untagged progression. This directly addresses the risk flagged in the planning discussion and is the right design choice.
+
+### Fallback chain is correctly implemented
+
+`PromptRepository.secondChordProgressionCandidates` implements the four-step fallback priority in the correct order: second pool excluding first, second pool including first, combined pool excluding first, combined pool including first. The same candidates are used by both per-step randomization (`applyRandom` in `MainActivity`) and full randomization (`randomizeAll` in `SongIdeaViewModel`). The shared-helper requirement from the plan is satisfied.
+
+### `ChordMapper.keyOneWholeStepHigher` and `renderProgressionOneWholeStepHigher` are clean and independently testable
+
+Both functions are pure: they take explicit inputs and return values without side effects. `keyOneWholeStepHigher` uses modulo wrapping correctly and handles an unknown key by returning null rather than throwing. The null is propagated through `renderProgressionOneWholeStepHigher` and handled gracefully in `SummaryScreen`. The Phase 3 manual verification checklist covers the wrap-around case; these functions are also good candidates for unit tests if a test harness is added.
+
+### `VI` mappings verified
+
+All 12 keys now include `"VI"` and the values are correct: `VI` in each key maps to the major chord whose root is the same as the diatonic `vi` minor (e.g. C → A, G → E, Bb → G). The Major Six Turnaround will now render correctly.
+
+---
+
 ## Completion Summary
 
 *Fill in when the cycle closes. Move this document to `doc/planning/completed/` afterward.*
 
-**Completion Date:** [YYYY-MM-DD]
-**Phases Completed:** [List or "All"]
-**Work Deferred:** [What was not done and why, or "None"]
+**Completion Date:** 2026-05-11
+**Phases Completed:** All implementation phases
+**Work Deferred:** Manual device/UI verification remains pending.
 
 **Accomplishments:**
-- [What was built or changed]
-- [What was built or changed]
+- Added suitability tags and role-aware first/second chord progression candidate pools.
+- Added shared fallback behavior for second progression randomization.
+- Added `VI` rendering support to `ChordMapper`.
+- Added persisted `Enable Chord Progression 3` setting.
+- Added `Chords 3` summary output using Chord Progression 1 rendered one whole step above the selected song key.
 
 **Metrics:**
-- Files modified: [N]
-- Build/test status: [Command and result]
+- Files modified: 11
+- Build/test status: `.\gradlew.bat assembleDebug` passed
 
 **Lessons / Notes:**
-[Anything worth remembering for future cycles: surprises, decisions made, things that worked well or did not.]
+Suitability tags are now behavior-oriented rather than section-oriented. `Chords 3` is implemented as a higher-key restatement, not as a guaranteed harmonic payoff.
+Claude review follow-up: matched the `Chords 3` separator to the existing chord rows and updated the second progression step copy to emphasize contrast rather than chorus-only framing.
+Pool differentiation follow-up: `COLOR` remains a descriptive suitability tag, but it no longer qualifies a progression for either the first or second progression pool by itself.
+
+

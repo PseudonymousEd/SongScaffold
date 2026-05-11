@@ -89,11 +89,17 @@ class SongIdeaViewModel : ViewModel() {
     fun randomizeAll(settings: StepSettings) {
         val steps = buildEnabledSteps(settings)
         _enabledSteps.value = steps
-        val progressions = PromptRepository.availableChordProgressions(settings.disableTwoChordProgressions)
+        val firstProgressions = PromptRepository.availableFirstChordProgressions(settings.disableTwoChordProgressions)
+        val allProgressions = PromptRepository.availableChordProgressions(settings.disableTwoChordProgressions)
         val key   = if (SongStep.SONG_KEY in steps) PromptRepository.majorKeys.random() else null
-        val prog  = if (SongStep.CHORD_PROGRESSION in steps) progressions.randomOrNull() else null
+        val prog  = if (SongStep.CHORD_PROGRESSION in steps)
+            firstProgressions.ifEmpty { allProgressions }.randomOrNull()
+        else null
         val prog2 = if (SongStep.SECOND_CHORD_PROGRESSION in steps)
-            progressions.filter { it != prog }.randomOrNull()
+            PromptRepository.secondChordProgressionCandidates(
+                disableTwoChordProgressions = settings.disableTwoChordProgressions,
+                firstProgression = prog
+            ).randomOrNull()
         else null
         _songIdea.value = SongIdea(
             topic               = if (SongStep.TOPIC in steps) PromptRepository.topics.random() else null,

@@ -54,7 +54,8 @@ fun StepScreen(
     selectedOption: String?,
     selectedProgression: ChordProgression?,
     selectedSecondProgression: ChordProgression?,
-    chordProgressions: List<ChordProgression>,
+    firstChordProgressions: List<ChordProgression>,
+    secondChordProgressions: List<ChordProgression>,
     onTopicRandom: () -> Unit,
     onRhymeWordRandom: () -> Unit,
     onOptionSelected: (String) -> Unit,
@@ -126,12 +127,12 @@ fun StepScreen(
                     )
                     SongStep.CHORD_PROGRESSION -> ChordProgressionStepContent(
                         selected = selectedProgression,
-                        progressions = chordProgressions,
+                        progressions = firstChordProgressions,
                         onSelect = onProgressionSelected
                     )
                     SongStep.SECOND_CHORD_PROGRESSION -> ChordProgressionStepContent(
                         selected = selectedSecondProgression,
-                        progressions = chordProgressions,
+                        progressions = secondChordProgressions,
                         onSelect = onSecondProgressionSelected
                     )
                     else -> OptionListStepContent(
@@ -438,7 +439,7 @@ private fun stepMeta(step: SongStep): StepMeta = when (step) {
     )
     SongStep.SECOND_CHORD_PROGRESSION -> StepMeta(
         "Second Chord Progression",
-        "Pick a second chord progression (e.g. for the chorus)."
+        "Pick a contrasting progression for the next section."
     )
     SongStep.SONG_KEY -> StepMeta(
         "Song Key",

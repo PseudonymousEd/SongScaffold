@@ -70,8 +70,12 @@ fun SongScaffoldApp() {
             }
 
             val step = enabledSteps[stepIndex]
-            val chordProgressions = PromptRepository.availableChordProgressions(
+            val firstChordProgressions = PromptRepository.availableFirstChordProgressions(
                 settings.disableTwoChordProgressions
+            )
+            val secondChordProgressions = PromptRepository.secondChordProgressionCandidates(
+                disableTwoChordProgressions = settings.disableTwoChordProgressions,
+                firstProgression = songIdea.chordProgression
             )
 
             StepScreen(
@@ -83,7 +87,8 @@ fun SongScaffoldApp() {
                 selectedOption = selectedOptionFor(step, songIdea),
                 selectedProgression = songIdea.chordProgression,
                 selectedSecondProgression = songIdea.secondChordProgression,
-                chordProgressions = chordProgressions,
+                firstChordProgressions = firstChordProgressions,
+                secondChordProgressions = secondChordProgressions,
                 onTopicRandom = {
                     songIdeaViewModel.setTopic(songIdeaViewModel.randomTopic())
                 },
@@ -121,6 +126,7 @@ fun SongScaffoldApp() {
         composable("summary") {
             SummaryScreen(
                 songIdea = songIdea,
+                settings = settings,
                 onStartOver = {
                     songIdeaViewModel.startSession(settings)
                     navController.navigate("step/0") {
@@ -202,6 +208,13 @@ private fun applyOption(step: SongStep, option: String, vm: SongIdeaViewModel) {
 }
 
 private fun applyRandom(step: SongStep, vm: SongIdeaViewModel, settings: StepSettings) {
+    val firstChordProgressions = PromptRepository.availableFirstChordProgressions(
+        settings.disableTwoChordProgressions
+    )
+    val secondChordProgressions = PromptRepository.secondChordProgressionCandidates(
+        disableTwoChordProgressions = settings.disableTwoChordProgressions,
+        firstProgression = vm.songIdea.value.chordProgression
+    )
     val chordProgressions = PromptRepository.availableChordProgressions(
         settings.disableTwoChordProgressions
     )
@@ -211,11 +224,11 @@ private fun applyRandom(step: SongStep, vm: SongIdeaViewModel, settings: StepSet
         SongStep.DELIVERY_MODE -> vm.setDeliveryMode(PromptRepository.deliveryModes.random())
         SongStep.PHRASING_STYLE -> vm.setPhrasingStyle(PromptRepository.phrasingStyles.random())
         SongStep.EMOTIONAL_INTENSITY -> vm.setEmotionalIntensity(PromptRepository.emotionalIntensityOptions.random())
-        SongStep.CHORD_PROGRESSION -> chordProgressions.randomOrNull()?.let(vm::setChordProgression)
-        SongStep.SECOND_CHORD_PROGRESSION -> chordProgressions
-            .filter { it != vm.songIdea.value.chordProgression }
+        SongStep.CHORD_PROGRESSION -> firstChordProgressions
+            .ifEmpty { chordProgressions }
             .randomOrNull()
-            ?.let(vm::setSecondChordProgression)
+            ?.let(vm::setChordProgression)
+        SongStep.SECOND_CHORD_PROGRESSION -> secondChordProgressions.randomOrNull()?.let(vm::setSecondChordProgression)
         SongStep.SONG_KEY -> vm.setSongKey(PromptRepository.majorKeys.random())
         SongStep.STARTING_NOTE -> vm.setStartingNote(PromptRepository.startingNoteOptions.random())
         SongStep.SECOND_NOTE_DIRECTION -> vm.setSecondNoteDirection(PromptRepository.secondNoteDirectionOptions.random())

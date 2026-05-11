@@ -28,6 +28,7 @@ class SettingsRepository(private val context: Context) {
         val SECOND_NOTE_DIRECTION = booleanPreferencesKey("second_note_direction")
         val RHYME_SCHEME = booleanPreferencesKey("rhyme_scheme")
         val DISABLE_TWO_CHORD_PROGRESSIONS = booleanPreferencesKey("disable_two_chord_progressions")
+        val ENABLE_CHORD_PROGRESSION_3 = booleanPreferencesKey("enable_chord_progression_3")
     }
 
     val stepSettings: Flow<StepSettings> = context.dataStore.data.map { prefs ->
@@ -44,7 +45,8 @@ class SettingsRepository(private val context: Context) {
             startingNoteEnabled = prefs[Keys.STARTING_NOTE] ?: true,
             secondNoteDirectionEnabled = prefs[Keys.SECOND_NOTE_DIRECTION] ?: true,
             rhymeSchemeEnabled = prefs[Keys.RHYME_SCHEME] ?: true,
-            disableTwoChordProgressions = prefs[Keys.DISABLE_TWO_CHORD_PROGRESSIONS] ?: false
+            disableTwoChordProgressions = prefs[Keys.DISABLE_TWO_CHORD_PROGRESSIONS] ?: false,
+            enableChordProgression3 = prefs[Keys.ENABLE_CHORD_PROGRESSION_3] ?: false
         )
     }
 
@@ -63,6 +65,7 @@ class SettingsRepository(private val context: Context) {
             prefs[Keys.SECOND_NOTE_DIRECTION] = settings.secondNoteDirectionEnabled
             prefs[Keys.RHYME_SCHEME] = settings.rhymeSchemeEnabled
             prefs[Keys.DISABLE_TWO_CHORD_PROGRESSIONS] = settings.disableTwoChordProgressions
+            prefs[Keys.ENABLE_CHORD_PROGRESSION_3] = settings.enableChordProgression3
         }
     }
 }

@@ -1,6 +1,13 @@
 package com.songscaffold.app.data
 
 import com.songscaffold.app.model.ChordProgression
+import com.songscaffold.app.model.ChordProgressionSuitability
+import com.songscaffold.app.model.ChordProgressionSuitability.CADENTIAL
+import com.songscaffold.app.model.ChordProgressionSuitability.COLOR
+import com.songscaffold.app.model.ChordProgressionSuitability.LIFT
+import com.songscaffold.app.model.ChordProgressionSuitability.LOOP
+import com.songscaffold.app.model.ChordProgressionSuitability.OPEN
+import com.songscaffold.app.model.ChordProgressionSuitability.PIVOT
 import com.songscaffold.app.model.TopicCategory
 import com.songscaffold.app.model.TopicPrompt
 
@@ -148,59 +155,112 @@ object PromptRepository {
         ).forEach { add(TopicPrompt(it, TopicCategory.ELEMENT)) }
     }
 
+    private fun chordProgression(
+        name: String,
+        category: String,
+        romanNumerals: List<String>,
+        vararg suitability: ChordProgressionSuitability
+    ): ChordProgression =
+        ChordProgression(name, category, romanNumerals, suitability.toSet())
+
     val chordProgressions: List<ChordProgression> = listOf(
-        ChordProgression("Classic Cadence",        "Classic / Standard",      listOf("I", "IV", "V", "I")),
-        ChordProgression("Pop Axis",               "Classic / Standard",      listOf("I", "V", "vi", "IV")),
-        ChordProgression("Minor Pop Loop",         "Classic / Standard",      listOf("vi", "IV", "I", "V")),
+        chordProgression("Classic Cadence",        "Classic / Standard",      listOf("I", "IV", "V", "I"), CADENTIAL),
+        chordProgression("Pop Axis",               "Classic / Standard",      listOf("I", "V", "vi", "IV"), LIFT, LOOP),
+        chordProgression("Minor Pop Loop",         "Classic / Standard",      listOf("vi", "IV", "I", "V"), OPEN, LIFT, LOOP),
 
-        ChordProgression("Two Five One",           "Musical Theatre / Jazz",  listOf("ii", "V", "I")),
-        ChordProgression("Circle Turnaround",      "Musical Theatre / Jazz",  listOf("I", "vi", "ii", "V")),
-        ChordProgression("Extended Turnaround",    "Musical Theatre / Jazz",  listOf("iii", "vi", "ii", "V")),
-        ChordProgression("Borrowed Minor Four",    "Musical Theatre / Jazz",  listOf("I", "Imaj7", "IV", "iv")),
+        chordProgression("Two Five One",           "Musical Theatre / Jazz",  listOf("ii", "V", "I"), CADENTIAL),
+        chordProgression("Circle Turnaround",      "Musical Theatre / Jazz",  listOf("I", "vi", "ii", "V"), OPEN, CADENTIAL),
+        chordProgression("Extended Turnaround",    "Musical Theatre / Jazz",  listOf("iii", "vi", "ii", "V"), OPEN, PIVOT),
+        chordProgression("Borrowed Minor Four",    "Musical Theatre / Jazz",  listOf("I", "Imaj7", "IV", "iv"), COLOR, PIVOT),
 
-        ChordProgression("Secondary Dominant Lift","Expressive / Color",      listOf("I", "V/vi", "vi", "IV")),
-        ChordProgression("Major To Minor Four",    "Expressive / Color",      listOf("I", "IV", "iv", "I")),
-        ChordProgression("Minor To Resolution",    "Expressive / Color",      listOf("vi", "ii", "V", "I")),
-        ChordProgression("Flat Seven Color",       "Expressive / Color",      listOf("I", "♭VII", "IV", "I")),
+        chordProgression("Secondary Dominant Lift","Expressive / Color",      listOf("I", "V/vi", "vi", "IV"), LIFT, COLOR),
+        chordProgression("Major To Minor Four",    "Expressive / Color",      listOf("I", "IV", "iv", "I"), CADENTIAL, COLOR),
+        chordProgression("Minor To Resolution",    "Expressive / Color",      listOf("vi", "ii", "V", "I"), CADENTIAL, LIFT),
+        chordProgression("Flat Seven Color",       "Expressive / Color",      listOf("I", "♭VII", "IV", "I"), COLOR, CADENTIAL),
 
-        ChordProgression("Two Chord Open Loop",    "Loops",                   listOf("I", "IV")),
-        ChordProgression("Two Five Loop",          "Loops",                   listOf("ii", "V")),
+        chordProgression("Two Chord Open Loop",    "Loops",                   listOf("I", "IV"), OPEN, LOOP),
+        chordProgression("Two Five Loop",          "Loops",                   listOf("ii", "V"), OPEN, LOOP),
 
-        ChordProgression("50s Progression",          "Classic / Standard",      listOf("I", "vi", "IV", "V")),
-        ChordProgression("Plagal Loop",              "Classic / Standard",      listOf("IV", "I", "V", "I")),
-        ChordProgression("Descending Bass Line",     "Classic / Standard",      listOf("I", "V/7", "vi", "V")),
-        ChordProgression("Axis Variant",             "Classic / Standard",      listOf("vi", "V", "IV", "I")),
+        chordProgression("50s Progression",          "Classic / Standard",      listOf("I", "vi", "IV", "V"), LIFT, LOOP),
+        chordProgression("Plagal Loop",              "Classic / Standard",      listOf("IV", "I", "V", "I"), CADENTIAL, LIFT),
+        chordProgression("Descending Bass Line",     "Classic / Standard",      listOf("I", "V/7", "vi", "V"), OPEN, COLOR),
+        chordProgression("Axis Variant",             "Classic / Standard",      listOf("vi", "V", "IV", "I"), CADENTIAL, LIFT),
 
-        ChordProgression("Backdoor Resolution",      "Musical Theatre / Jazz",  listOf("ii", "♭VII", "I")),
-        ChordProgression("Rhythm Changes",           "Musical Theatre / Jazz",  listOf("I", "vi", "ii", "V")),
-        ChordProgression("Minor Two Five One",       "Musical Theatre / Jazz",  listOf("iiø", "V7", "i")),
-        ChordProgression("Chromatic Walk-Up",        "Musical Theatre / Jazz",  listOf("I", "I#dim", "ii", "V")),
-        ChordProgression("Major Six Turnaround",     "Musical Theatre / Jazz",  listOf("I", "VI", "ii", "I")),
+        chordProgression("Backdoor Resolution",      "Musical Theatre / Jazz",  listOf("ii", "♭VII", "I"), CADENTIAL, COLOR),
+        chordProgression("Rhythm Changes",           "Musical Theatre / Jazz",  listOf("I", "vi", "ii", "V"), OPEN, CADENTIAL),
+        chordProgression("Minor Two Five One",       "Musical Theatre / Jazz",  listOf("iiø", "V7", "i"), CADENTIAL, COLOR),
+        chordProgression("Chromatic Walk-Up",        "Musical Theatre / Jazz",  listOf("I", "I#dim", "ii", "V"), PIVOT, COLOR),
+        chordProgression("Major Six Turnaround",     "Musical Theatre / Jazz",  listOf("I", "VI", "ii", "I"), CADENTIAL, COLOR),
 
-        ChordProgression("Line Cliche Major",        "Expressive / Color",      listOf("I", "Imaj7", "I7", "IV")),
-        ChordProgression("Mixolydian Variant",       "Expressive / Color",      listOf("I", "♭VII", "I", "IV")),
-        ChordProgression("Chromatic Mediants",       "Expressive / Color",      listOf("I", "♭III", "IV", "I")),
-        ChordProgression("Deceptive Cycle",          "Expressive / Color",      listOf("V", "vi", "IV", "I")),
+        chordProgression("Line Cliche Major",        "Expressive / Color",      listOf("I", "Imaj7", "I7", "IV"), OPEN, COLOR, PIVOT),
+        chordProgression("Mixolydian Variant",       "Expressive / Color",      listOf("I", "♭VII", "I", "IV"), COLOR, LOOP),
+        chordProgression("Chromatic Mediants",       "Expressive / Color",      listOf("I", "♭III", "IV", "I"), COLOR, LIFT),
+        chordProgression("Deceptive Cycle",          "Expressive / Color",      listOf("V", "vi", "IV", "I"), CADENTIAL, PIVOT),
 
-        ChordProgression("Drone Loop",               "Loops",                   listOf("I", "♭VII")),
-        ChordProgression("Suspended Loop",           "Loops",                   listOf("I", "Vsus4")),
-        ChordProgression("Minor Oscillation",        "Loops",                   listOf("i", "♭VI")),
-        ChordProgression("Pedal Loop",               "Loops",                   listOf("I", "ii/I", "IV/I", "V/I")),
+        chordProgression("Drone Loop",               "Loops",                   listOf("I", "♭VII"), OPEN, LOOP, COLOR),
+        chordProgression("Suspended Loop",           "Loops",                   listOf("I", "Vsus4"), OPEN, LOOP),
+        chordProgression("Minor Oscillation",        "Loops",                   listOf("i", "♭VI"), OPEN, LOOP, COLOR),
+        chordProgression("Pedal Loop",               "Loops",                   listOf("I", "ii/I", "IV/I", "V/I"), OPEN, LOOP, COLOR),
 
-        ChordProgression("Epic Rise",                "Cinematic / Modern",      listOf("vi", "IV", "I", "V")),
-        ChordProgression("Modern Film Loop",         "Cinematic / Modern",      listOf("i", "♭VI", "III", "♭VII")),
-        ChordProgression("Lydian Lift",              "Cinematic / Modern",      listOf("I", "II", "IV", "I")),
-        ChordProgression("Ambiguous Loop",           "Cinematic / Modern",      listOf("I", "V", "ii", "IV"))
+        chordProgression("Epic Rise",                "Cinematic / Modern",      listOf("vi", "IV", "I", "V"), LIFT, LOOP),
+        chordProgression("Modern Film Loop",         "Cinematic / Modern",      listOf("i", "♭VI", "III", "♭VII"), OPEN, LOOP, COLOR),
+        chordProgression("Lydian Lift",              "Cinematic / Modern",      listOf("I", "II", "IV", "I"), LIFT, COLOR),
+        chordProgression("Ambiguous Loop",           "Cinematic / Modern",      listOf("I", "V", "ii", "IV"), OPEN, LOOP, PIVOT)
 
 
     )
 
+    private val firstProgressionSuitability = setOf(OPEN, LOOP)
+    private val secondProgressionSuitability = setOf(CADENTIAL, LIFT, PIVOT)
+
     fun availableChordProgressions(disableTwoChordProgressions: Boolean): List<ChordProgression> =
+        applyChordProgressionSettings(chordProgressions, disableTwoChordProgressions)
+
+    fun availableFirstChordProgressions(disableTwoChordProgressions: Boolean): List<ChordProgression> =
+        applyChordProgressionSettings(
+            chordProgressions.filter { it.isSuitedForFirstProgression() },
+            disableTwoChordProgressions
+        ).ifEmpty { availableChordProgressions(disableTwoChordProgressions) }
+
+    fun availableSecondChordProgressions(disableTwoChordProgressions: Boolean): List<ChordProgression> =
+        applyChordProgressionSettings(
+            chordProgressions.filter { it.isSuitedForSecondProgression() },
+            disableTwoChordProgressions
+        ).ifEmpty { availableChordProgressions(disableTwoChordProgressions) }
+
+    fun secondChordProgressionCandidates(
+        disableTwoChordProgressions: Boolean,
+        firstProgression: ChordProgression?
+    ): List<ChordProgression> {
+        val secondPool = availableSecondChordProgressions(disableTwoChordProgressions)
+        val combinedPool = availableChordProgressions(disableTwoChordProgressions)
+
+        return secondPool.filterNotFirst(firstProgression)
+            .ifEmpty { secondPool }
+            .ifEmpty { combinedPool.filterNotFirst(firstProgression) }
+            .ifEmpty { combinedPool }
+    }
+
+    private fun applyChordProgressionSettings(
+        progressions: List<ChordProgression>,
+        disableTwoChordProgressions: Boolean
+    ): List<ChordProgression> =
         if (disableTwoChordProgressions) {
-            chordProgressions.filterNot(::isTwoChordProgression)
+            progressions.filterNot(::isTwoChordProgression)
         } else {
-            chordProgressions
+            progressions
         }
+
+    private fun ChordProgression.isSuitedForFirstProgression(): Boolean =
+        suitability.any { it in firstProgressionSuitability }
+
+    private fun ChordProgression.isSuitedForSecondProgression(): Boolean =
+        suitability.any { it in secondProgressionSuitability }
+
+    private fun List<ChordProgression>.filterNotFirst(
+        firstProgression: ChordProgression?
+    ): List<ChordProgression> =
+        firstProgression?.let { first -> filter { it != first } } ?: this
 
     fun isTwoChordProgression(progression: ChordProgression): Boolean =
         progression.romanNumerals.size == 2

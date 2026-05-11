@@ -27,11 +27,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.songscaffold.app.model.SongIdea
+import com.songscaffold.app.model.StepSettings
+import com.songscaffold.app.music.ChordMapper
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SummaryScreen(
     songIdea: SongIdea,
+    settings: StepSettings,
     onStartOver: () -> Unit,
     onRandomIdea: () -> Unit,
     onHome: () -> Unit
@@ -83,6 +86,18 @@ fun SummaryScreen(
                         SummaryRow(label = "Emotional Intensity", value = it)
                     }
 
+                    val transposedProgression = if (settings.enableChordProgression3) {
+                        val progression = songIdea.chordProgression
+                        val key = songIdea.songKey
+                        if (progression != null && key != null) {
+                            ChordMapper.renderProgressionOneWholeStepHigher(key, progression)
+                        } else {
+                            null
+                        }
+                    } else {
+                        null
+                    }
+
                     val hasChordSection = songIdea.chordProgression != null ||
                         songIdea.secondChordProgression != null || songIdea.songKey != null
                     if (hasChordSection) {
@@ -116,6 +131,14 @@ fun SummaryScreen(
                                 label = "Chords 2",
                                 value = songIdea.secondRenderedChords.joinToString(" – ")
                             )
+                        }
+                        transposedProgression?.let { (key, chords) ->
+                            if (chords.isNotEmpty()) {
+                                SummaryRow(
+                                    label = "Chords 3 ($key)",
+                                    value = chords.joinToString(" – ")
+                                )
+                            }
                         }
                     }
 

@@ -124,6 +124,18 @@ fun SettingsScreen(
             ) {
                 onToggle { s -> s.copy(disableTwoChordProgressions = it) }
             }
+            SettingsToggleRow(
+                label = "Enable Chord Progression 3",
+                subtitle = if (!settings.chordProgressionEnabled || !settings.songKeyEnabled) {
+                    "Requires Chord Progression and Song Key"
+                } else {
+                    null
+                },
+                checked = settings.enableChordProgression3,
+                enabled = settings.chordProgressionEnabled && settings.songKeyEnabled
+            ) {
+                onToggle { s -> s.copy(enableChordProgression3 = it) }
+            }
         }
     }
 }
