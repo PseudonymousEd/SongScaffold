@@ -172,6 +172,7 @@ object PromptRepository {
         chordProgression("Circle Turnaround",      "Musical Theatre / Jazz",  listOf("I", "vi", "ii", "V"), OPEN, CADENTIAL),
         chordProgression("Extended Turnaround",    "Musical Theatre / Jazz",  listOf("iii", "vi", "ii", "V"), OPEN, PIVOT),
         chordProgression("Borrowed Minor Four",    "Musical Theatre / Jazz",  listOf("I", "Imaj7", "IV", "iv"), COLOR, PIVOT),
+        chordProgression("Dominant Lift Setup",    "Musical Theatre / Jazz",  listOf("IV", "I", "II7", "V"), OPEN, LIFT, PIVOT, COLOR),
 
         chordProgression("Secondary Dominant Lift","Expressive / Color",      listOf("I", "V/vi", "vi", "IV"), LIFT, COLOR),
         chordProgression("Major To Minor Four",    "Expressive / Color",      listOf("I", "IV", "iv", "I"), CADENTIAL, COLOR),
@@ -190,7 +191,7 @@ object PromptRepository {
         chordProgression("Rhythm Changes",           "Musical Theatre / Jazz",  listOf("I", "vi", "ii", "V"), OPEN, CADENTIAL),
         chordProgression("Minor Two Five One",       "Musical Theatre / Jazz",  listOf("iiø", "V7", "i"), CADENTIAL, COLOR),
         chordProgression("Chromatic Walk-Up",        "Musical Theatre / Jazz",  listOf("I", "I#dim", "ii", "V"), PIVOT, COLOR),
-        chordProgression("Major Six Turnaround",     "Musical Theatre / Jazz",  listOf("I", "VI", "ii", "I"), CADENTIAL, COLOR),
+        chordProgression("Major Six Turnaround",     "Musical Theatre / Jazz",  listOf("I", "VI", "ii", "I"), OPEN, LOOP, COLOR, PIVOT),
 
         chordProgression("Line Cliche Major",        "Expressive / Color",      listOf("I", "Imaj7", "I7", "IV"), OPEN, COLOR, PIVOT),
         chordProgression("Mixolydian Variant",       "Expressive / Color",      listOf("I", "♭VII", "I", "IV"), COLOR, LOOP),
