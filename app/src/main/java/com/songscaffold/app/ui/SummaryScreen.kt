@@ -35,10 +35,27 @@ import com.songscaffold.app.music.ChordMapper
 fun SummaryScreen(
     songIdea: SongIdea,
     settings: StepSettings,
+    isPlaying: Boolean,
+    activeProgressionIndex: Int,
+    onPlay: () -> Unit,
+    onPause: () -> Unit,
+    onQueueProgression: (Int) -> Unit,
     onStartOver: () -> Unit,
     onRandomIdea: () -> Unit,
     onHome: () -> Unit
 ) {
+    val transposedProgression = if (settings.enableChordProgression3) {
+        val progression = songIdea.chordProgression
+        val key = songIdea.songKey
+        if (progression != null && key != null)
+            ChordMapper.renderProgressionOneWholeStepHigher(key, progression)
+        else null
+    } else null
+
+    val hasRenderedChords = songIdea.renderedChords.isNotEmpty()
+    val hasSecond = songIdea.secondChordProgression != null
+    val hasThird = transposedProgression?.second?.isNotEmpty() == true
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -86,30 +103,17 @@ fun SummaryScreen(
                         SummaryRow(label = "Emotional Intensity", value = it)
                     }
 
-                    val transposedProgression = if (settings.enableChordProgression3) {
-                        val progression = songIdea.chordProgression
-                        val key = songIdea.songKey
-                        if (progression != null && key != null) {
-                            ChordMapper.renderProgressionOneWholeStepHigher(key, progression)
-                        } else {
-                            null
-                        }
-                    } else {
-                        null
-                    }
-
                     val hasChordSection = songIdea.chordProgression != null ||
                         songIdea.secondChordProgression != null || songIdea.songKey != null
                     if (hasChordSection) {
                         HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
-                        val hasTwo = songIdea.secondChordProgression != null
                         songIdea.chordProgression?.let {
                             SummaryRow(
-                                label = if (hasTwo) "Chord Prog. 1" else "Chord Progression",
+                                label = if (hasSecond) "Chord Prog. 1" else "Chord Progression",
                                 value = it.name
                             )
                             SummaryRow(
-                                label = if (hasTwo) "Pattern 1" else "Pattern",
+                                label = if (hasSecond) "Pattern 1" else "Pattern",
                                 value = it.romanDisplay
                             )
                         }
@@ -122,7 +126,7 @@ fun SummaryScreen(
                         }
                         if (songIdea.renderedChords.isNotEmpty()) {
                             SummaryRow(
-                                label = if (hasTwo) "Chords 1" else "Chords",
+                                label = if (hasSecond) "Chords 1" else "Chords",
                                 value = songIdea.renderedChords.joinToString(" – ")
                             )
                         }
@@ -156,6 +160,57 @@ fun SummaryScreen(
                     songIdea.rhymeScheme?.let {
                         HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
                         SummaryRow(label = "Rhyme Scheme", value = it)
+                    }
+                }
+            }
+
+            // Playback controls — only shown when chord progressions are enabled and chords are available
+            if (settings.chordProgressionEnabled && hasRenderedChords) {
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // Play / Pause
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Button(
+                        onClick = if (isPlaying) onPause else onPlay,
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Text(if (isPlaying) "Pause ($activeProgressionIndex)" else "Play ($activeProgressionIndex)")
+                    }
+                }
+
+                // Progression selectors
+                val showFirst = (hasSecond && activeProgressionIndex == 2) ||
+                    (hasThird && activeProgressionIndex == 3)
+                val showSecond = hasSecond && activeProgressionIndex != 2
+                val showThird = hasThird && activeProgressionIndex != 3
+
+                if (showFirst || showSecond || showThird) {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        if (showFirst) {
+                            OutlinedButton(
+                                onClick = { onQueueProgression(1) },
+                                modifier = Modifier.weight(1f)
+                            ) { Text("1st") }
+                        }
+                        if (showSecond) {
+                            OutlinedButton(
+                                onClick = { onQueueProgression(2) },
+                                modifier = Modifier.weight(1f)
+                            ) { Text("2nd") }
+                        }
+                        if (showThird) {
+                            OutlinedButton(
+                                onClick = { onQueueProgression(3) },
+                                modifier = Modifier.weight(1f)
+                            ) { Text("3rd") }
+                        }
                     }
                 }
             }

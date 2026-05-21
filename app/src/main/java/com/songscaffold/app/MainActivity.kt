@@ -44,6 +44,8 @@ fun SongScaffoldApp() {
     val settings by settingsViewModel.settings.collectAsState()
     val songIdea by songIdeaViewModel.songIdea.collectAsState()
     val enabledSteps by songIdeaViewModel.enabledSteps.collectAsState()
+    val isPlaying by songIdeaViewModel.isPlaying.collectAsState()
+    val activeProgressionIndex by songIdeaViewModel.activeProgressionIndex.collectAsState()
 
     NavHost(navController = navController, startDestination = "home") {
 
@@ -127,6 +129,11 @@ fun SongScaffoldApp() {
             SummaryScreen(
                 songIdea = songIdea,
                 settings = settings,
+                isPlaying = isPlaying,
+                activeProgressionIndex = activeProgressionIndex,
+                onPlay = { songIdeaViewModel.play(settings.bpm) },
+                onPause = { songIdeaViewModel.pause() },
+                onQueueProgression = { songIdeaViewModel.queueProgression(it) },
                 onStartOver = {
                     songIdeaViewModel.startSession(settings)
                     navController.navigate("step/0") {

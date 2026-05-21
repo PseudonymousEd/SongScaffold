@@ -1,6 +1,9 @@
 package com.songscaffold.app.viewmodel
 
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewModelScope
+import com.songscaffold.app.audio.AudioEngine
 import com.songscaffold.app.data.PromptRepository
 import com.songscaffold.app.model.ChordProgression
 import com.songscaffold.app.model.SongIdea
@@ -8,12 +11,18 @@ import com.songscaffold.app.model.SongStep
 import com.songscaffold.app.model.StepSettings
 import com.songscaffold.app.model.TopicPrompt
 import com.songscaffold.app.music.ChordMapper
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
-class SongIdeaViewModel : ViewModel() {
+class SongIdeaViewModel(application: Application) : AndroidViewModel(application) {
+
+    private val audioEngine = AudioEngine(application)
 
     private val _songIdea = MutableStateFlow(SongIdea())
     val songIdea: StateFlow<SongIdea> = _songIdea.asStateFlow()
@@ -21,7 +30,19 @@ class SongIdeaViewModel : ViewModel() {
     private val _enabledSteps = MutableStateFlow<List<SongStep>>(emptyList())
     val enabledSteps: StateFlow<List<SongStep>> = _enabledSteps.asStateFlow()
 
+    private val _isPlaying = MutableStateFlow(false)
+    val isPlaying: StateFlow<Boolean> = _isPlaying.asStateFlow()
+
+    private val _activeProgressionIndex = MutableStateFlow(1)
+    val activeProgressionIndex: StateFlow<Int> = _activeProgressionIndex.asStateFlow()
+
+    private var queuedProgressionIndex: Int? = null
+    private var pausedChordIndex: Int = 0
+    private var playbackJob: Job? = null
+
     fun startSession(settings: StepSettings) {
+        stopPlayback()
+        resetProgressionState()
         _songIdea.value = SongIdea()
         _enabledSteps.value = buildEnabledSteps(settings)
     }
@@ -35,7 +56,6 @@ class SongIdeaViewModel : ViewModel() {
         if (s.emotionalIntensityEnabled) add(SongStep.EMOTIONAL_INTENSITY)
         if (s.chordProgressionEnabled) add(SongStep.CHORD_PROGRESSION)
         if (s.chordProgressionEnabled && s.secondChordProgressionEnabled) add(SongStep.SECOND_CHORD_PROGRESSION)
-        // Song Key only appears when Chord Progression is also enabled
         if (s.chordProgressionEnabled && s.songKeyEnabled) add(SongStep.SONG_KEY)
         if (s.startingNoteEnabled) add(SongStep.STARTING_NOTE)
         if (s.secondNoteDirectionEnabled) add(SongStep.SECOND_NOTE_DIRECTION)
@@ -87,6 +107,8 @@ class SongIdeaViewModel : ViewModel() {
     fun randomRhymeWord(): String = PromptRepository.rhymeWords.random()
 
     fun randomizeAll(settings: StepSettings) {
+        stopPlayback()
+        resetProgressionState()
         val steps = buildEnabledSteps(settings)
         _enabledSteps.value = steps
         val firstProgressions = PromptRepository.availableFirstChordProgressions(settings.disableTwoChordProgressions)
@@ -120,6 +142,82 @@ class SongIdeaViewModel : ViewModel() {
     }
 
     fun reset() {
+        stopPlayback()
+        resetProgressionState()
         _songIdea.value = SongIdea()
+    }
+
+    // --- Playback ---
+
+    fun play(bpm: Int) {
+        if (_isPlaying.value) return
+        _isPlaying.value = true
+        val chordDurationMs = (60_000L / bpm) * 4L
+        val startIndex = pausedChordIndex
+        playbackJob = viewModelScope.launch(Dispatchers.IO) {
+            var chordIndex = startIndex
+            while (true) {
+                val chords = chordsForIndex(_activeProgressionIndex.value)
+                while (chordIndex < chords.size) {
+                    ensureActive()
+                    pausedChordIndex = chordIndex + 1
+                    audioEngine.playChord(chords[chordIndex], chordDurationMs)
+                    chordIndex++
+                }
+                chordIndex = 0
+                pausedChordIndex = 0
+                // Apply any queued switch after each full pass
+                queuedProgressionIndex?.let { next ->
+                    _activeProgressionIndex.value = next
+                    queuedProgressionIndex = null
+                }
+            }
+        }
+        playbackJob?.invokeOnCompletion { _isPlaying.value = false }
+    }
+
+    fun pause() {
+        playbackJob?.cancel()
+        playbackJob = null
+        _isPlaying.value = false
+    }
+
+    fun queueProgression(index: Int) {
+        queuedProgressionIndex = index
+    }
+
+    private fun stopPlayback() {
+        playbackJob?.cancel()
+        playbackJob = null
+        _isPlaying.value = false
+        pausedChordIndex = 0
+    }
+
+    private fun resetProgressionState() {
+        _activeProgressionIndex.value = 1
+        queuedProgressionIndex = null
+        pausedChordIndex = 0
+    }
+
+    private fun chordsForIndex(index: Int): List<String> {
+        val idea = _songIdea.value
+        return when (index) {
+            1 -> idea.renderedChords
+            2 -> idea.secondRenderedChords
+            3 -> {
+                val prog = idea.chordProgression
+                val key = idea.songKey
+                if (prog != null && key != null)
+                    ChordMapper.renderProgressionOneWholeStepHigher(key, prog)?.second ?: emptyList()
+                else emptyList()
+            }
+            else -> idea.renderedChords
+        }
+    }
+
+    override fun onCleared() {
+        playbackJob?.cancel()
+        audioEngine.release()
+        super.onCleared()
     }
 }

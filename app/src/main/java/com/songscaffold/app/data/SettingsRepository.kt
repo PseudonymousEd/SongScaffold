@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.preferencesDataStore
 import com.songscaffold.app.model.StepSettings
@@ -29,6 +30,7 @@ class SettingsRepository(private val context: Context) {
         val RHYME_SCHEME = booleanPreferencesKey("rhyme_scheme")
         val DISABLE_TWO_CHORD_PROGRESSIONS = booleanPreferencesKey("disable_two_chord_progressions")
         val ENABLE_CHORD_PROGRESSION_3 = booleanPreferencesKey("enable_chord_progression_3")
+        val BPM = intPreferencesKey("bpm")
     }
 
     val stepSettings: Flow<StepSettings> = context.dataStore.data.map { prefs ->
@@ -46,7 +48,8 @@ class SettingsRepository(private val context: Context) {
             secondNoteDirectionEnabled = prefs[Keys.SECOND_NOTE_DIRECTION] ?: true,
             rhymeSchemeEnabled = prefs[Keys.RHYME_SCHEME] ?: true,
             disableTwoChordProgressions = prefs[Keys.DISABLE_TWO_CHORD_PROGRESSIONS] ?: false,
-            enableChordProgression3 = prefs[Keys.ENABLE_CHORD_PROGRESSION_3] ?: false
+            enableChordProgression3 = prefs[Keys.ENABLE_CHORD_PROGRESSION_3] ?: false,
+            bpm = prefs[Keys.BPM] ?: 60
         )
     }
 
@@ -66,6 +69,7 @@ class SettingsRepository(private val context: Context) {
             prefs[Keys.RHYME_SCHEME] = settings.rhymeSchemeEnabled
             prefs[Keys.DISABLE_TWO_CHORD_PROGRESSIONS] = settings.disableTwoChordProgressions
             prefs[Keys.ENABLE_CHORD_PROGRESSION_3] = settings.enableChordProgression3
+            prefs[Keys.BPM] = settings.bpm
         }
     }
 }

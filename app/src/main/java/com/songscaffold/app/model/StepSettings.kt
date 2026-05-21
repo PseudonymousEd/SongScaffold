@@ -14,5 +14,6 @@ data class StepSettings(
     val secondNoteDirectionEnabled: Boolean = true,
     val rhymeSchemeEnabled: Boolean = true,
     val disableTwoChordProgressions: Boolean = false,
-    val enableChordProgression3: Boolean = false
+    val enableChordProgression3: Boolean = false,
+    val bpm: Int = 60
 )
