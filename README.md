@@ -2,11 +2,11 @@
 
 <img src="app/src/main/res/mipmap-xxxhdpi/ic_launcher.webp" alt="SongScaffold icon" width="96"/>
 
-An Android app that generates constraints for improvised songs — not AI songwriting, just structured creative prompts to reduce blank-page pressure.
+An Android app that generates constraints for improvised songs - structured creative prompts to give varied direction.
 
 ## What it does
 
-SongScaffold guides you through a sequence of musical and performance decisions (topic, key, chord progression, rhyme scheme, and more) so you can start improvising rather than staring at a blank page.
+SongScaffold guides you through a sequence of musical and performance decisions (topic, key, chord progression, rhyme scheme, and more) so you can start improvising.
 
 ## Tech stack
 
