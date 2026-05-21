@@ -1,5 +1,7 @@
 # SongScaffold
 
+<img src="app/src/main/res/mipmap-xxxhdpi/ic_launcher.webp" alt="SongScaffold icon" width="96"/>
+
 An Android app that generates constraints for improvised songs — not AI songwriting, just structured creative prompts to reduce blank-page pressure.
 
 ## What it does
@@ -24,4 +26,4 @@ MIT — see [LICENSE](LICENSE).
 
 ## Authors
 
-[PseudonymousEd](https://github.com/PseudonymousEd), co-authored with [Claude Code](https://claude.ai/code).
+[PseudonymousEd](https://github.com/PseudonymousEd), co-authored with [Claude Code](https://claude.ai/code) and [Codex](https://openai.com/index/openai-codex/).
