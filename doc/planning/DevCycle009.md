@@ -1,6 +1,6 @@
 # DevCycle 009: New I–V Chord Progressions
 
-**Status:** Planning
+**Status:** Work Complete
 **Start Date:** 2026-05-31
 **Target Completion:** TBD
 **Focus:** Add 11 new I–V chord progressions and support for first-inversion I/3 chords.
@@ -23,9 +23,9 @@ Expand the chord progression library with 11 new progressions identified in `doc
 
 ### Phase 1: Add I/3 to ChordMapper
 
-**Status:** Planning
+**Status:** Work Complete
 
-- [ ] Add `"I/3"` entry to all 12 key maps in `ChordMapper.kt`.
+- [x] Add `"I/3"` entry to all 12 key maps in `ChordMapper.kt`.
 
 **Technical Notes:**
 `I/3` is the tonic triad in first inversion — root chord with the major third in the bass. Mappings:
@@ -49,9 +49,9 @@ File: `app/src/main/java/com/songscaffold/app/music/ChordMapper.kt`
 
 ### Phase 2: Add New Progressions to PromptRepository
 
-**Status:** Planning
+**Status:** Work Complete
 
-- [ ] Add all 11 new chord progressions to the `chordProgressions` list in `PromptRepository.kt`.
+- [x] Add all 11 new chord progressions to the `chordProgressions` list in `PromptRepository.kt`.
 
 **Technical Notes:**
 All 11 progressions to add, in the order they appear in the candidates table:
@@ -74,9 +74,9 @@ File: `app/src/main/java/com/songscaffold/app/data/PromptRepository.kt`
 
 ### Phase 3: Build and Verify
 
-**Status:** Planning
+**Status:** In Progress
 
-- [ ] Run `.\gradlew.bat assembleDebug` — confirm clean build.
+- [x] Run `.\gradlew.bat assembleDebug` — BUILD SUCCESSFUL in 25s.
 - [ ] Install on device/emulator and navigate to the chord progression step.
 - [ ] Confirm all 11 new progressions appear in the list.
 - [ ] Select `Love is an Open Door` with a key (e.g. D) and confirm `D/F#` renders on the summary screen.

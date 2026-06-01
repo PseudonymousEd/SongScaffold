@@ -206,7 +206,19 @@ object PromptRepository {
         chordProgression("Epic Rise",                "Cinematic / Modern",      listOf("vi", "IV", "I", "V"), LIFT, LOOP),
         chordProgression("Modern Film Loop",         "Cinematic / Modern",      listOf("i", "♭VI", "III", "♭VII"), OPEN, LOOP, COLOR),
         chordProgression("Lydian Lift",              "Cinematic / Modern",      listOf("I", "II", "IV", "I"), LIFT, COLOR),
-        chordProgression("Ambiguous Loop",           "Cinematic / Modern",      listOf("I", "V", "ii", "IV"), OPEN, LOOP, PIVOT)
+        chordProgression("Ambiguous Loop",           "Cinematic / Modern",      listOf("I", "V", "ii", "IV"), OPEN, LOOP, PIVOT),
+
+        chordProgression("Easy",                     "Musical Theatre / Jazz",  listOf("I", "iii", "ii", "V"), OPEN, LIFT, PIVOT),
+        chordProgression("Mostly Me",                "Musical Theatre / Jazz",  listOf("I", "IV", "ii", "V"), LIFT, CADENTIAL),
+        chordProgression("Love is an Open Door",     "Musical Theatre / Jazz",  listOf("I", "I/3", "IV", "V"), OPEN),
+        chordProgression("Stepwise Lift",            "Classic / Standard",      listOf("I", "ii", "IV", "V"), LIFT, OPEN),
+        chordProgression("Sal Tlay",                 "Cinematic / Modern",      listOf("I", "iii", "IV", "V"), LIFT, OPEN, COLOR),
+        chordProgression("Who Knew",                 "Expressive / Color",      listOf("I", "ii", "vi", "V"), OPEN, PIVOT, COLOR),
+        chordProgression("Thirds Descent",           "Expressive / Color",      listOf("I", "iii", "vi", "V"), OPEN, COLOR, PIVOT),
+        chordProgression("More Than a Feeling",      "Classic / Standard",      listOf("I", "IV", "vi", "V"), LIFT, LOOP, OPEN),
+        chordProgression("Ascending Walk",           "Classic / Standard",      listOf("I", "ii", "iii", "V"), LIFT, OPEN),
+        chordProgression("Four Three Drop",          "Expressive / Color",      listOf("I", "IV", "iii", "V"), COLOR, PIVOT),
+        chordProgression("Life Would Suck",          "Expressive / Color",      listOf("I", "vi", "iii", "V"), OPEN, COLOR, LOOP)
 
 
     )
