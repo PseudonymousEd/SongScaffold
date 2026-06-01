@@ -8,6 +8,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Confirming recommendations, answering questions, or approving a plan does NOT constitute a start instruction. Wait for the user to explicitly say something like "start," "go ahead," "implement this," or equivalent direct language before doing any implementation work.
 
+**Exception: planning documents are not implementation.** Creating or updating dev cycle documents (`DevCycleNNN.md`), design docs, and idea files in `doc/` is planning work, not implementation. Do this immediately when requested — do not wait for a start instruction.
+
+**When asked to create a dev cycle, the first and immediate action is to produce the `DevCycleNNN.md` document.** Do not summarise the plan in chat and wait — write the document first, then report what was created.
+
 ## What This App Does
 
 SongScaffold generates structured creative prompts for improvised songs. It is not AI songwriting — it gives musicians random constraints (topic, key, chord progression, rhyme scheme, etc.) to spark live improvisation.

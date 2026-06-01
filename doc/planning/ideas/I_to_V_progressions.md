@@ -35,15 +35,18 @@ vi, IV : My Life Would suck Without You
 ii, vi : Who Knew
 iii, ii : Easy
 
-## New Progression candidates
-| Roman Numerals | Name | Suitability
-| I - iii - ii - V | Easy | |
-| I - IV - ii - V | Mostly Me | |
-| I - ii - IV - V | | |
-| I - iii - IV - V | Sal Tlay | |
-| I - ii - vi - V | Who Knew | |
-| I - iii - vi - V | | |
-| I - IV - vi - V | More Than a Feeling | |
-| I - ii - iii - V | | |
-| I - IV - iii - V | | |
-| I - vi - iii - V | Life Would Suck | |
+## New Progression Candidates
+
+| Roman Numerals   | Name                 | Category | Suitability |
+|------------------|----------------------|---|---|
+| I – iii – ii – V | Easy                 | Musical Theatre / Jazz | OPEN, LIFT, PIVOT |
+| I – IV – ii – V  | Mostly Me            | Classic / Standard | LIFT, CADENTIAL |
+| I – I/3 – IV – V | Love is an Open Door | Classic / Standard | OPEN |
+| I – ii – IV – V  | Stepwise Lift        | Classic / Standard | LIFT, OPEN |
+| I – iii – IV – V | Sal Tlay             | Cinematic / Modern | LIFT, OPEN, COLOR |
+| I – ii – vi – V  | Who Knew             | Expressive / Color | OPEN, PIVOT, COLOR |
+| I – iii – vi – V | Thirds Descent       | Expressive / Color | OPEN, COLOR, PIVOT |
+| I – IV – vi – V  | More Than a Feeling  | Classic / Standard | LIFT, LOOP, OPEN |
+| I – ii – iii – V | Ascending Walk       | Classic / Standard | LIFT, OPEN |
+| I – IV – iii – V | Four Three Drop      | Expressive / Color | COLOR, PIVOT |
+| I – vi – iii – V | Life Would Suck      | Expressive / Color | OPEN, COLOR, LOOP |
